@@ -2,6 +2,9 @@ import sys
 import re
 from NLPlib import NLPlib
 
+def is_twt_time_format(s):
+    return True if s.endswith(' +0000\n') else False # TODO: use regex later
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print 'usage: python preprocess.py [raw-tweet-file]'
@@ -9,13 +12,19 @@ if __name__ == '__main__':
 
     input_path = 'tweets/' + sys.argv[1]
     output_path = 'preprocessed/' + sys.argv[1] + '.twt'
-    output_file = open(output_path, 'w+')
+    of = open(output_path, 'w+')
     tagger = NLPlib()
     lines = open(input_path).readlines()
     for line in lines:
-        # remove html tags
-        line = re.sub(r'<.+?>', '', line)
+        if line == '|\n': # skip tweets delimiters
+            of.write(line)
+            continue
+        if is_twt_time_format(line):
+            continue
+
+        line = re.sub(r'<.+?>', '', line) # remove html tags
         line = re.sub(r'&amp;', '&', line)
+        line = re.sub(r'https?://\S+', '', line)
 
         # sentence segmentation
         sentence_boundary = re.compile(r'[.?!]+ ')
@@ -50,11 +59,6 @@ if __name__ == '__main__':
             output_sentence = ' '.join(tokens_w_tags)
             print output_sentence
             # print tags
-            if i == len(sentences) - 1:
-                output_sentence += '\n|\n'
-            else:
-                output_sentence += '\n'
-            output_file.write(output_sentence)
+            output_sentence += '\n'
+            of.write(output_sentence)
 
-        # output tweet delimiter '|'
-        # output_file.write('|')
