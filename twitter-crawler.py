@@ -3,16 +3,16 @@ import simplejson
 import urllib
 import sys
 
-companies = {# 'apple': ['apple', 'iphone', 'iphone4s', 'iphone4', 'siri', 'ipod', 'mac', 'macintosh', 'itunes', 'ios'],
-        # 'google': ['google', 'android', 'droid', 'googleplus', 'gplus', 'gmail', 'youtube', 'chrome', 'googlemap', 'gmap'],
+companies = {'apple': ['apple', 'iphone', 'iphone4s', 'iphone4', 'siri', 'ipod', 'mac', 'macintosh', 'itunes', 'ios'],
+        'google': ['google', 'android', 'droid', 'googleplus', 'gplus', 'gmail', 'youtube', 'chrome', 'googlemap', 'gmap'],
         'microsoft': ['windows', 'windows8', 'xbox', 'xbox360', 'kinect', 'msn', 'bing', 'ie'],
-        # 'amazon': ['amazon', 'kindle', 'kindlefire'],
-        # 'rim': ['rim', 'blackberry'],
+        'amazon': ['amazon', 'kindle', 'kindlefire'],
+        'rim': ['rim', 'blackberry'],
         'dell': ['dell'],
-        # 'intel': ['intel', 'xeon'],
-        # 'yahoo': ['yahoo', 'yahoomail', 'ymail', 'yim'],
-        # 'nvidia': ['nvidia', 'tegra', 'tegra3', 'geforce'],
-        # 'netflix': ['netflix']
+        'intel': ['intel', 'xeon'],
+        'yahoo': ['yahoo', 'yahoomail', 'ymail', 'yim'],
+        'nvidia': ['nvidia', 'tegra', 'tegra3', 'geforce'],
+        'netflix': ['netflix']
         }
 
 def get_tweets(query, outfile):
