@@ -2,30 +2,44 @@ import requests
 import simplejson
 import urllib
 import sys
-import time
 
-base_url = 'https://api.twitter.com/1/statuses/user_timeline.json?'
-params = {'screen_name': 'nytimes', 'count': '200', 'page': 1}
-sites = ['TechCrunch', 'CNETNews', 'RWW', 'mashable', 'Gizmodo', 'gigaom', 'allthingsd', 'TheNextWeb', 'verge', 'Wired', 'nytimesbits', 'WSJTech', 'SAI', 'guardiantech', 'HuffPostTech']
-
-for site in sites:
-    outfile = 'tweets/objective/' + site
-    params['screen_name'] = site
+def get_tweets(query, outfile):
+    twt_search_url = 'http://search.twitter.com/search.json?'
+    params = {'q': query, 'lang': 'en', 'rpp': '100', 'page': 1}
     of = open(outfile, 'w')
 
-    for p in range(1, 2):
+    for p in range(1, 16):
         params['page'] = p
-        url = base_url + urllib.urlencode(params)
+        url = twt_search_url + urllib.urlencode(params)
         print url
 
         r = requests.get(url)
         j = simplejson.loads(r.content)
-        
-        for item in j:
+
+        if 'error' in j:
+            print j['error']
+            of.close()
+            return
+
+        # if not other results in current page, don't have to dive into suceeding pages
+        if len(j['results']) == 0:
+            of.close()
+            return
+
+        for item in j['results']:
             of.write(item['text'].encode('utf-8', 'ignore').strip() + '\n')
             of.write(item['created_at'].encode('utf-8', 'ignore').strip() + '\n')
             of.write('|\n') # delimiter of tweets
 
-        time.sleep(30) # being nice to twitter api
-
     of.close()
+
+if __name__ == '__main__':
+    # positive and negative training set
+    query = ':)'
+    outfile = 'tweets/subjective/positive'
+    get_tweets(query, outfile)
+
+    query = ':('
+    outfile = 'tweets/subjective/negative'
+    get_tweets(query, outfile)
+
