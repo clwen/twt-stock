@@ -6,11 +6,10 @@ import time
 
 base_url = 'https://api.twitter.com/1/statuses/user_timeline.json?'
 params = {'screen_name': 'nytimes', 'count': '200', 'page': 1}
-# sites = ['TechCrunch', 'CNETNews', 'RWW', 'mashable', 'Gizmodo', 'gigaom', 'allthingsd', 'TheNextWeb', 'verge', 'Wired', 'nytimesbits', 'WSJTech', 'SAI', 'guardiantech', 'HuffPostTech']
-sites = ['HuffPostTech']
+sites = ['TechCrunch', 'CNETNews', 'RWW', 'mashable', 'Gizmodo', 'gigaom', 'allthingsd', 'TheNextWeb', 'verge', 'Wired', 'nytimesbits', 'WSJTech', 'SAI', 'guardiantech', 'HuffPostTech']
 
 for site in sites:
-    outfile = 'tweets/neutral/' + site
+    outfile = 'tweets/objective/' + site
     params['screen_name'] = site
     of = open(outfile, 'w')
 
