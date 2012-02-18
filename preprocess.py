@@ -3,8 +3,12 @@ import re
 from NLPlib import NLPlib
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print 'usage: python preprocess.py [raw-tweet-file]'
+        sys.exit()
+
     input_path = 'tweets/' + sys.argv[1]
-    output_path = 'twts/' + sys.argv[1] + '.twt'
+    output_path = 'preprocessed/' + sys.argv[1] + '.twt'
     output_file = open(output_path, 'w+')
     tagger = NLPlib()
     lines = open(input_path).readlines()
