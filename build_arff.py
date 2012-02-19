@@ -1,5 +1,6 @@
 import sys
 import itertools
+from collections import OrderedDict
 
 fp_words = []
 sp_words = []
@@ -11,7 +12,7 @@ adverbs = ['RB', 'RBR', 'RBS']
 wh_words = ['WDT', 'WP', 'WP$', 'WRB']
 past_words = ['VBD', 'VBN']
 future_words = ['MD']
-slang_words = ['smh', 'fwb', 'lmfao', 'lmao', 'lms', 'tbh', 'rofl', 'wtf', 'bff', 'wyd', 'lylc', 'brb', 'atm', 'imao', 'sml', 'btw', 'bw', 'imho', 'fyi', 'ppl', 'sob', 'ttyl', 'imo', 'ltr', 'thx', 'kk', 'omg', 'ttys', 'afn', 'bbs', 'cya', 'ez', 'f2f', 'gtr', 'ic', 'jk', 'k', 'ly', 'ya', 'nm', 'np', 'plz', 'ru', 'so', 'tc', 'tmi', 'ym', 'ur', 'u', 'sol'] # TODO: move it to a file
+slang_words = []
 
 def import_words_from_file(filename):
     # import feature word lists
@@ -30,10 +31,13 @@ def extract_feature_words():
     global fp_words
     global sp_words
     global tp_words
+    global conj_words
+    global slang_words
     fp_words = import_words_from_file('First-person')
     sp_words = import_words_from_file('Second-person')
     tp_words = import_words_from_file('Third-person')
     conj_words = import_words_from_file('Conjunct')
+    slang_words = import_words_from_file('Slang')
 
 def all_capital(word):
     return True if len(word) >= 2 and all(c.isupper() for c in word) else False
@@ -79,26 +83,9 @@ def extract_features(class_name, twt_file, output_file):
     # open output file in append mode
     of = open(output_file, 'a')
 
-    fp_count = 0
-    sp_count = 0
-    tp_count = 0
-    conj_count = 0
-    past_count = 0
-    future_count = 0
-    comma_count = 0
-    colon_count = 0
-    dash_count = 0
-    paren_count = 0
-    ellipse_count = 0
-    common_nouns_count = 0
-    proper_nouns_count = 0
-    adverbs_count = 0
-    wh_count = 0
-    slang_count = 0
-    all_capital_count = 0
+    # feature count
+    fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
     sentence_in_tokens = []
-    avg_sentence_in_tokens = 0
-    sentence_num = 0
 
     input_path = 'preprocessed/' + twt_file
     # read lines from .twt file
@@ -110,7 +97,7 @@ def extract_features(class_name, twt_file, output_file):
         if line != '|\n':
             twt_buf += line.strip()
             sentence_in_tokens.append(len(line.strip().split()))
-            sentence_num += 1
+            fcnt['sentence_num'] += 1
             continue
         # else, if it's '|', process all the tokens in buffer
         # decompose to tokens
@@ -124,66 +111,50 @@ def extract_features(class_name, twt_file, output_file):
                 continue
             # check if it's in the feature list
             if word in fp_words:
-                fp_count += 1
+                fcnt['first_person'] += 1
             if word in sp_words:
-                sp_count += 1
+                fcnt['second_person'] += 1
             if word in tp_words:
-                tp_count += 1
+                fcnt['third_person'] += 1
             if word in conj_words:
-                conj_count += 1
+                fcnt['conjunction'] += 1
             if tag in past_words:
-                past_count += 1
+                fcnt['past_tense'] += 1
             if tag in future_words:
-                future_count += 1
+                fcnt['future_tense'] += 1
             if word == ',':
-                comma_count += 1
+                fcnt['comma'] += 1
             if word == ':' or word == ';':
-                colon_count += 1
+                fcnt['colon'] += 1
             if word == '-':
-                dash_count += 1
+                fcnt['dash'] += 1
             if word == '(' or word == ')':
-                paren_count += 1
+                fcnt['parentheses'] += 1
             if word == '....' or word == '...':
-                ellipse_count += 1
+                fcnt['ellipse'] += 1
             if tag in common_nouns:
-                common_nouns_count += 1
+                fcnt['common_noun'] += 1
             if tag in proper_nouns:
-                proper_nouns_count += 1
+                fcnt['proper_noun'] += 1
             if tag in adverbs:
-                adverbs_count += 1
+                fcnt['adverb'] += 1
             if tag in wh_words:
-                wh_count += 1
+                fcnt['wh'] += 1
             if word in slang_words:
-                slang_count += 1
+                fcnt['slang'] += 1
             if all_capital(word):
-                all_capital_count += 1
+                fcnt['all_capital'] += 1
             # count average length of sentences in tokens
-            avg_sentence_in_tokens = float(sum(sentence_in_tokens)) / len(sentence_in_tokens)
-            avg_token_in_chars = float(sum(len(t) for t in tokens)) / len(tokens) # should exclude punctuation
-        # write to output file
-        of.write(str(fp_count) + ',' + str(sp_count) + ',' + str(tp_count) + ',' + str(conj_count) + ',' + str(past_count) + ',' + str(future_count) + ',' + str(comma_count) + ',' + str(colon_count) + ',' + str(dash_count) + ',' + str(paren_count) + ',' + str(ellipse_count) + ',' + str(common_nouns_count) + ',' + str(proper_nouns_count) + ',' + str(adverbs_count) + ',' + str(wh_count) + ',' + str(slang_count) + ',' + str(all_capital_count) + ',' + str(avg_sentence_in_tokens) + ',' + str(avg_token_in_chars) + ',' + str(sentence_num) + ',' + class_name + '\n')
+            fcnt['avg_sentence_in_tokens'] = float(sum(sentence_in_tokens)) / len(sentence_in_tokens)
+            fcnt['avg_token_in_chars'] = float(sum(len(t) for t in tokens)) / len(tokens) # should exclude punctuation
+
+        # write to output file # TODO: use fcnt
+        of.write(','.join(str(f) for f in fcnt.values()) + ',' + class_name + '\n')
+
         # clean the buffer for next tweet
         twt_buf = ''
-        fp_count = 0
-        sp_count = 0
-        tp_count = 0
-        conj_count = 0
-        past_count = 0
-        future_count = 0
-        comma_count = 0
-        colon_count = 0
-        dash_count = 0
-        paren_count = 0
-        ellipse_count = 0
-        common_nouns_count = 0
-        proper_nouns_count = 0
-        adverbs_count = 0
-        wh_count = 0
-        slang_count = 0
-        all_capital_count = 0
+        fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
         sentence_in_tokens = []
-        avg_sentence_in_tokens = 0
-        sentence_num = 0
 
     # close output file
     of.close()
