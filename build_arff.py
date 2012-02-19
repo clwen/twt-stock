@@ -100,7 +100,7 @@ def extract_features(class_name, twt_file, output_file):
     avg_sentence_in_tokens = 0
     sentence_num = 0
 
-    input_path = 'twts/' + twt_file
+    input_path = 'preprocessed/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
