@@ -13,4 +13,4 @@ if __name__ == '__main__':
         # run twtt.py with specifying the filename
         twtt_cmd = 'python preprocess.py ' + filename
         print twtt_cmd
-        # os.system(twtt_cmd)
+        os.system(twtt_cmd)

@@ -3,7 +3,7 @@ import re
 from NLPlib import NLPlib
 
 def is_twt_time_format(s):
-    return True if s.endswith(' +0000\n') else False # TODO: use regex later
+    return True if s.endswith(' +0000\n') or s.endswith(' +0000 2012\n') else False # TODO: use regex later
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
