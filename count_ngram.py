@@ -46,5 +46,10 @@ if __name__ == '__main__':
     sd = sorted(d.iteritems(), key=operator.itemgetter(1), reverse=True)
 
     # write top n tokens to file
-    for i in range(100):
-        print sd[i],
+    output_file = 'ngrams/' + sys.argv[1]
+    of = open(output_file, 'w')
+    print len(sd)
+    for ngram in sd:
+        print ngram[0]
+        of.write(ngram[0] + '\n')
+    of.close()
