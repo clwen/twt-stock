@@ -37,7 +37,8 @@ if __name__ == '__main__':
         count_ngram_from_file('tweets/subjective/positive')
         count_ngram_from_file('tweets/subjective/negative')
     elif sys.argv[1] == 'objective':
-        pass # TODO: wait for implement
+        for filename in os.listdir('tweets/objective/'):
+            count_ngram_from_file('tweets/objective/' + filename)
     else:
         print 'error: wrong argument for filename'
         sys.exit()
@@ -48,8 +49,6 @@ if __name__ == '__main__':
     # write top n tokens to file
     output_file = 'ngrams/' + sys.argv[1]
     of = open(output_file, 'w')
-    print len(sd)
     for ngram in sd:
-        print ngram[0]
         of.write(ngram[0] + '\n')
     of.close()
