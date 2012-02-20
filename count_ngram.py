@@ -1,5 +1,6 @@
 import os
 import sys
+import operator
 
 d = {}
 
@@ -17,6 +18,7 @@ def count_ngram_from_file(filename):
         # TODO: punctuation should be removed
         # TODO: count @, #, RT, URL
         for token in tokens:
+            token = token.lower()
             if token not in d:
                 d[token]  = 0
             else:
@@ -40,4 +42,9 @@ if __name__ == '__main__':
         print 'error: wrong argument for filename'
         sys.exit()
 
-    print d
+    # sort d
+    sd = sorted(d.iteritems(), key=operator.itemgetter(1), reverse=True)
+
+    # write top n tokens to file
+    for i in range(100):
+        print sd[i],
