@@ -49,8 +49,8 @@ def output_preamble(output_file, classes):
     # open output file in open mode
     f = open(output_file, 'w')
     # write relation
-    f.write('@relation twit_classification\n\n')
-    # write attributes
+    f.write('@relation twt_sentiment_analysis\n\n')
+    # write attributes TODO: can be automatic
     f.write('@attribute 1st_person numeric\n')
     f.write('@attribute 2st_person numeric\n')
     f.write('@attribute 3rd_person numeric\n')
@@ -151,7 +151,7 @@ def extract_features(class_name, twt_file, output_file):
         # write to output file # TODO: use fcnt
         of.write(','.join(str(f) for f in fcnt.values()) + ',' + class_name + '\n')
 
-        # clean the buffer for next tweet
+        # clean buffer and counters for next tweet
         twt_buf = ''
         fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
         sentence_in_tokens = []
