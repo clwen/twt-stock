@@ -2,6 +2,7 @@ import requests
 import simplejson
 import urllib
 import sys
+import time
 
 companies = {'apple': ['apple', 'iphone', 'iphone4s', 'iphone4', 'siri', 'ipod', 'mac', 'macintosh', 'itunes', 'ios'],
         'google': ['google', 'android', 'droid', 'googleplus', 'gplus', 'gmail', 'youtube', 'chrome', 'googlemap', 'gmap'],
@@ -25,8 +26,17 @@ def get_tweets(query, outfile):
         url = twt_search_url + urllib.urlencode(params)
         print url
 
-        r = requests.get(url)
-        j = simplejson.loads(r.content)
+        success = False
+        while not success:
+            r = requests.get(url)
+            try:
+                j = simplejson.loads(r.content)
+            except simplejson.decoder.JSONDecodeError:
+                print 'oops, got no response from twitter'
+                print 'sleep for 120 seconds and try again'
+                time.sleep(120)
+                continue
+            success = True
 
         if 'error' in j:
             print j['error']
@@ -51,13 +61,6 @@ if __name__ == '__main__':
             query = '#' + keyword
             outfile = 'tweets/' + company + '_' + keyword
             get_tweets(query, outfile)
-
-    # positive and negative training set
-    # query = ':)'
-    # outfile = 'tweets/positive'
-    # get_tweets(query, outfile)
-
-    # query = ':('
-    # outfile = 'tweets/negative'
-    # get_tweets(query, outfile)
+            print 'sleep for three seconds.. being nice to twitter..'
+            time.sleep(3)
 
