@@ -6,7 +6,7 @@ import sys
 def get_tweets(query, outfile):
     twt_search_url = 'http://search.twitter.com/search.json?'
     params = {'q': query, 'lang': 'en', 'rpp': '100', 'page': 1}
-    of = open(outfile, 'w')
+    of = open(outfile, 'a')
 
     for p in range(1, 16):
         params['page'] = p

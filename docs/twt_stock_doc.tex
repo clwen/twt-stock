@@ -1,0 +1,98 @@
+\title{CSC 2511 Project: Predicting Stock Prices using Opnion Mining and Setiment Analysis of Twitter Data}
+\author{
+    Chung-Lin Wen \\
+    Department of Computer Science \\
+    University of Toronto
+}
+\date{\today}
+
+\documentclass[12pt]{article}
+\fontfamily{ptm}
+
+\begin{document}
+\maketitle
+
+\input{defs}
+
+\section{Introduction}
+Nowadays, it is pretty common for consumers to post their evaluation for a product online, especially on social networks or blogs. It is highly possible that companies that receive more positive comments will yield a better performance better than companies that don't, since better customer evaluation imply better brand value and bigger revenue. For financial performance here, we will focus on stock price as the metric. Hence, we propose to verify that if there do exist a positive correlation between the consumer evaluations and the stock prices.
+
+To verify our assumption, we will start with a few companies that are widely discussed over the web. Besides, ideally, its revenue should primarily depend on a few key products, which means we can use a few keywords to collect the data we need. For instance, \#iphone4s, \#iphone4, \#iphone3, \#ipad, \#macbookair, etc. Apple Incorporation, for instance, is one of the company we will start with, since it meets the condition we discussed above. 
+
+For the social network platform we will use, we favor twitter as our major data source for the following reasons. First, the amount of data is huge enough for our usage. Second, its microblogging nature provide sentence level texts that focus on usually a single idea (I love \#iPhone4S coz I had a lot of fun playing with \#Siri), thus reducing the noise we have to deal with.
+
+After collecting the data, we will classify the tweets into positive, neutral (or irrelevant), negative. After that, we will study the relationship between this evaluation and the stock price of corresponding companies using statistical techniques.
+
+If time permitted, we would also like to apply the same study to other languages such as Chinese or Japanese and other companies such as HTC or Sony.
+
+\section{Related Works}
+For its wide and valuable usage, sentiment analysis, which is to classify the polarity (positive, negative) given a document or a sentence, has been widely studied yet still an extremely challenging problem. Pang and Lee \cite{Pang:08} did a comprehensive survey about the state-of-the-art techniques in the sentimental area. Liu \cite{Liu:10} summarizes the theory and techniques of the subfield for the purpose of teaching and learning.
+
+Turney \etal~\cite{Turney:02} pioneered in the field by firstly address the problem. He first extract phrases that might contain subjective evaluation using its POS tags, then apply PMI-IR algorithm \cite{Turney:01} to determine the semantic orientation by measuring the similarity of the extracted phrases and "excellent", "poor" (regarded as positive and negative, respectively, in this paper). Finally, the polarity of a document is given by averaging the semantic orientations of all the extracted phrases.
+
+In contrast, rather than using predefined bags of words for polarity, Pang \etal~\cite{Pang:02} approach the problem using features that are prior-knowledge-free. They use unigrams and bigrams extracted from corpus according to the frequencies then apply the standard machine learning classifiers, which including Naive Bayes, Maximum Entropy and Support Vector Machines (SVM). They concludes that using the presence of unigrams and using SVM as classfier yields the best accuracy (82.9\%).
+
+Besides polarity, detection of opinion strength is also made posible by further research. Thelwall \etal~\cite{Thelwall:10} proposed to use a dictionary of sentiment words with associated strength measures as one of its feature to detect the opinion strength. Repeated letters, punctuation, emoticons are also used to make the system suitable for informal text.
+
+Since the popularity of social networks, especially the microblogging has grown quickly in the recent years, there are several systems utilize these platforms as the corpus of sentiment analysis. Go \etal~\cite{Go:09} first experiment sentiment analysis on Twitter, the most popular microblogging platform. They basically follow the algorithm used as Pang \etal~\cite{Pang:02}. Unigram, Bigram, POS tags are used as features; Bayes, SVM, Maximum Entropy are used as classifier. They report that the combination of unigram and Bayes with mutual information feature selection method yields the best result, which is slightly different from Pang \etal~\cite{Pang:02}
+
+Pak and Paroubek \cite{Pak:10} conduct a two-phase classification to improve the accuracy. Tweets are first divide to objective and subjective, then subjective tweets are further divide to positive and negative. For training data, they use pre-defined emoticons to get the subjective data, while retrieve tweets from popular newspaper accounts as objective data. In terms of features and classifiers, they follow a similar setup as Pang \etal~\cite{Pang:02} but also includes trigrams as one of the feature. They conclude that bigram yields the best result since it maintains a good balance between coverage and also able to catch sentiment expressions such as negation.
+
+Barbosa and Feng \cite{Barbosa:10} propose propose new features to increase the accuracy of Twitter sentiment analysis. They propose the use of two additional sets of features. One of the sets is the meta features. In addition to POS tags, a word list with pre-defined polarity and subjectivity is used. Note that if the word is preceded by negative expression (e.g., not, never), the polarity will be reversed. The other set they propose is the use of tweets syntax feature, such as retweet, hashtags, reply, link.
+
+Agarwal \etal~\cite{Agarwal:11} claimed they have ahiceved a better result by incorporating the tree kernel model, which is a tree of features such as stop words, target, URL, English words. They compared the tree kernel based model with unigram model and feature-based model from previous work and conclude that the tree kernel model outperforms the other two. Besides, they claimed that using random sampled streaming tweets instead of that searched by keywords introduces fewer biases.
+
+There are different applications on data mining of Twitter or other social networks. Petrovic \etal~\cite{Petrovic:10} proposed a system to detect new event on Twitter, on which news propagate even quicker than the traditional news medias.
+
+There are also applications for sentiment analysis, although not necessarily using Twitter data as a corpus. Besides only indicating the review is positive or negative, Kim \etal~\cite{Kim:06} proposed a system that also extract the reasons behind these positive and negative opnions by an maximum entropy model.
+
+Blair-Goldensohn \etal~\cite{Blair:08} propose to incorporate the readily available information other than text itself to produce a better result. They have also integrated a summary of customer review, which includes different aspects (e.g., food, decor, service, etc in a restaurant) and the corresponding reasons customers love or hates a specific store or product.
+
+Among all the applications, we are most interested about applications that utilize sentiment analysis or opnion mining to predict some metrics in the physical world. Asur and Huberman \cite{Asur:10} used Twitter data to predict the box-office revenues for movies. They study 24 movies released between November 2009 and February 2010 and conclude that the average tweet-rates (published tweets per hour) is statiscally correalated with its box-office revenue. They also report that sentiment content can improve the correalation although not significant as tweet-rates themselves.
+
+However, surprisingly, alghough there are some related works in empirical finance \cite{Brown:04}, by far none has studied the relation between consumer evaluation in social networks and stock prices. This is what we are proposing to do in this project.
+
+\section{Experiment Setup}
+Our experiment contains the following major steps: data collection, normalization, feature extraction, classification, statistical inference.
+
+For data collection, as stated before, we will mainly use Twitter as our primary corpus. Since Twitter API only allow external users to parse the tweet to a week, we will write a custom script to parse the tweets. Additionally, we will also use data from Spinn3r \cite{Spinn3r}. For implementation for the Twitter parser, we wil utilize Python libary such as Requests \cite{Requests} and BeautifulSoup \cite{BeautifulSoup}.
+
+Here we list the tech companies we would like to study, along with their key products and hash tags that we will use for searching in the Twitter. We includes top tech companies that has sufficient historical stock prices data at NASDAQ. Note that we didn't include companies that haven't IPO or just IPO, such as Twitter itself or Facebook.
+
+For keywords, we interested in the major products of the company (such as Windows for Microsoft) or new product that are widely discussed in Twitter (such as iPhone4S for Apple). We exclude some keywords that will introduce ambiguity (such as Microsoft Office with an literarily office). For some company that major products is hard to cover in a keyword (such as Amazon), we just list the company name as its keyword. In addition, to have a broad coverage and get adapt to the casual nature of Twitter, we also listed some common abbreviations for products (such as 'bb' stands for 'blackberry'). Note that a company might be highly correalated with keywords from other companies, such as 'Amazon' and 'iTunes'. We count only the keyword directly related to the current company.
+
+\begin{center}
+    \begin{tabular}{ | l || l | }
+        \hline
+        Apple &  \vbox{\hbox{\strut \#apple, \#iphone, \#iphone4s, \#iphone4,}\hbox{\strut \#siri, \#ipod, \#mac, \#itunes}} \\ \hline
+        Google & \vbox{\hbox{\strut \#google, \#android, \#gmail, \#youtube,}\hbox{\strut \#googleplus, \#gplus, \#googlemap, \#gmap}} \\ \hline
+        Microsoft & \#windows, \#xbox, \#kinect, \#msn \\ \hline
+        Amazon & \#amazon \\ \hline
+        Research in Motion & \#rim, \#blackberry, \#bb \\ \hline
+        Dell & \#dell \\ \hline
+        Intel & \#intel, \#xeon, \#ultrabook \\ \hline
+        Yahoo & \#yahoo, \#yahoomail, \#ymail, \#yim \\ \hline
+        Nvidia & \#nvidia, \#geforce \\ \hline
+        Netflix & \#netflix \\
+        \hline
+    \end{tabular}
+\end{center}
+
+To train the positive, negative, we fetch tweets with positve emoticons such as ':)' and negative emoticons such as ':(', respectively. For neutral tweets, we fetch tweets from news account such as @nytimes or @WSJ. The news account we fetched from includes @nytimes, @WSJ, @washingtonpost, @HuffingtonPost, @globeandmail, @TorontoStar, @BBCBreaking, @cnnbrk, @latimes, @Reuters, @guardian. Since our tweets is mainly about technology, we also include some technology news account: @TechCrunch, @CNETNews, @engadget, @slashdot, @RWW, @mashable, @Gizmodo, @gigaom, @allthingsd, @TheNextWeb, @verge, @Wired, @nytimesbits, @WSJTech, @SAI, @guardiantech, @HuffPostTech.
+
+For data normalization, we will remove urls, html tags and do tokenization and conduct part-of-speech tagging. We will utilize Python Natural Language Toolkit (NLTK) \cite{NLTK} for this part.
+
+For feature extraction, we will follow similar principles as assignment one. We will also propose new features according to our study. Details to be updated in the later check points.
+
+For classification, as Pak \etal~\cite{Pak:10} reported, multinominal Naive Bayes classifier yields the best result, we will use it as a start point.
+
+Finally, we will use statical techniques to evaluate the correlation between consumer opinions and the stock prices. Here, cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
+
+\section{Limitations}
+Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @@franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detect by our current system.
+
+\bibliographystyle{abbrv}
+\bibliography{reference}
+
+\end{document}
+

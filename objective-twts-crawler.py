@@ -11,15 +11,22 @@ sites = ['TechCrunch', 'CNETNews', 'RWW', 'mashable', 'Gizmodo', 'gigaom', 'allt
 for site in sites:
     outfile = 'tweets/objective/' + site
     params['screen_name'] = site
-    of = open(outfile, 'w')
+    of = open(outfile, 'a')
 
     for p in range(1, 2):
         params['page'] = p
         url = base_url + urllib.urlencode(params)
         print url
 
-        r = requests.get(url)
-        j = simplejson.loads(r.content)
+        success = False
+        while not success:
+            r = requests.get(url)
+            try:
+                j = simplejson.loads(r.content)
+            except simplejson.decoder.JSONDecodeError:
+                print 'oops, got no response from twitter, try again'
+                continue
+            success = True
         
         for item in j:
             of.write(item['text'].encode('utf-8', 'ignore').strip() + '\n')
