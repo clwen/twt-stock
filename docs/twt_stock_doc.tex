@@ -132,17 +132,34 @@ Finally, we extract most used unigram in our positve and negative training data,
 \subsection{Classification}\label{classification}
 For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Maimum Entropy through machine learning package WEKA \cite{Witten:2005}. We will evaluate the accuracy by conducting cross-validation on training data. We will then apply the classifier to our test data. As Pang \etal~\cite{Pang:02} and Go \etal~\cite{Go:09} reported, an accuracy around 80\% for polarity classfier can be expected.
 
-We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $o_i$, where $p_i + n_i + o_i = 1$.
+We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $b_i$, where $p_i + n_i + b_i = 1$.
 
 \subsection{Statistical Inference}\label{statistical-inference}
 Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We will fetch stock prices history from Yahoo Finance for the companies we studied.
 
-Cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
+Our hypothesis is that the companies that receive more positive opinion will eventually get a positive impact on their stock prices. Hence, for a given company, we define the opinion vector as the difference of ratio between positive and negative opnion which represent the postive opnion toward a company $O = [o_i]$, where $o_i = p_i - n_i$, for $i$ from $1$ to $n$. We also have stock prices $S = [s_i]$, for $i$ from $1$ to $n$. The problem we are interested is that whether these two time series are correlated or not. We will use Pearson product-moment correlation coefficient (Pearson coefficient) to verify our hypothesis.
+
+We define our Pearson coefficient as:
+$$
+PPMCC = \frac{\sum_{i=1}^{n}(O_i - \bar{O})(S_i - \bar{S})}{\sqrt{\sum_{i=1}^{n}(O_i - \bar{O})^2}\sqrt{\sum_{i=1}^{n}(S_i - \bar{S})^2}}
+$$
+
+Where $\bar{O}$ and $\bar{S}$ is the average over the opinion vector and the stock price, respectively.
+
+Since we anticipate there might be a delaying effect from consumer evaluations to the time stock prices reflect the consumer opinion, we will use the cross correlation to find the best time window that maximize the Pearson coefficient. We will take that maximized Pearson coefficient to interpret our result.
+
+The value of Pearson coefficient ranges from $-1$ to $1$. In variables such as stock prices that are influenced by complicated factors, a Pearson coefficient that larger than $0.5$ indicates a strong correlation, while a Pearson coefficient ranges from $0.1$ to $0.3$ can be considered as a minor correlation \cite{Cohen:1988}. We expect the Pearson coefficient of our experiment should be at least $0.1$, a lower bound of minor correlation.
+
+Another statistical method we would like to use is the coherence of the cross-spectrum. The details will be updated later.
+
+For the implementation of the statistical inference, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}.
 
 \section{Limitations}
 Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.
 
 Second, collecting tweets once a week might miss some 'spike'. For instance, if an important product released at Wednesday but we happend to collect the data at Saturday morning then we might miss all the discussions on that Wednesday. Theoretically we can collect all the tweets in realtime to overcome this problem. However, we are technically limited by storage and Twitter API usage limitation.
+
+Third, current system doesn't handle new keywords that come out in middle of our study period. For instance, if iPad3 happen to release in this period, we will not include it in the current system. One way to solve it is to propose a better automatic keyword extraction mechanism.
 
 Finally, the period of collecting tweets is not long enough. Ideally we should collect for at least one or two years of tweets so that we can catch more big event such as important product releases and also reduce the impact of short-term noise.
 
