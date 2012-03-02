@@ -111,12 +111,35 @@ Our features can be divided into four categories: count of part-of-speech tags, 
 
 Meta-information includes average length of sentences, average length of tokens, number of sentences, etc., which forms our second category of features. Count of first/second/third person pronouns, punctuations will also be extracted.
 
-We also count Twitter-specific features, which includes hashtags, replies.
+We also count Twitter-specific features, which includes hashtags, replies. We listed features in previous three categories in Table \ref{feature-listing}.
 
 Finally, we extract most used unigram in our positve and negative training data, respectively. Since Pang \etal~\cite{Pang:02} reported that examing only the presence rather than counting the frequency of unigram yields better result. We will experiment whether presence of frequency produce better accuracy. In addition, we will also examine the best range of number of features we should use from the trained model.
 
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | }
+        \hline
+        Apple &  \vbox{\hbox{\strut \#apple, \#iphone, \#iphone4s, \#iphone4,}\hbox{\strut \#siri, \#ipod, \#mac, \#itunes}} \\ \hline
+        Google & \vbox{\hbox{\strut \#google, \#android, \#gmail, \#youtube,}\hbox{\strut \#googleplus, \#gplus, \#googlemap, \#gmap}} \\ \hline
+        Microsoft & \#windows, \#xbox, \#kinect, \#msn \\ \hline
+        Amazon & \#amazon \\ \hline
+        Research in Motion & \#rim, \#blackberry, \#bb \\ \hline
+        Dell & \#dell \\ \hline
+        Intel & \#intel, \#xeon, \#ultrabook \\ \hline
+        Yahoo & \#yahoo, \#yahoomail, \#ymail, \#yim \\ \hline
+        Nvidia & \#nvidia, \#geforce \\ \hline
+        Netflix & \#netflix \\
+        \hline
+    \end{tabular}
+\caption{Companies studied in this project and the associated keywords}
+\label{feature-listing}
+\end{center}
+\end{table}
+
 \subsection{Classification}\label{classification}
-For classification, as Pak \etal~\cite{Pak:10} reported, multinominal Naive Bayes classifier yields the best result, we will use it as a start point.
+For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Maimum Entropy through machine learning package WEKA.
+
+We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $o_i$, where $p_i + n_i + o_i = 1$.
 
 \subsection{Statistical Inference}\label{statistical-inference}
 We will fetch stock prices history from Yahoo Finance.
