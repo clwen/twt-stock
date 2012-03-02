@@ -50,7 +50,7 @@ Blair-Goldensohn \etal~\cite{Blair:08} propose to incorporate the readily availa
 
 Among all the applications, we are most interested about applications that utilize sentiment analysis or opnion mining to predict some metrics in the physical world. Asur and Huberman \cite{Asur:10} used Twitter data to predict the box-office revenues for movies. They study 24 movies released between November 2009 and February 2010 and conclude that the average tweet-rates (published tweets per hour) is statiscally correalated with its box-office revenue. They also report that sentiment content can improve the correalation although not significant as tweet-rates themselves.
 
-There are also financial applications using sentiment analysis for predicting stock prices. Schumaker \etal~\cite{Schumaker:2009} propose a system, AZFinText, which can predict the stock price of a company that mentioned by a financial news. They asuume financial news will have impact on the decision made within stock buyers, and it will have immediate effect so that the price after 20 minutes the news is released can be predicted. They implemented the SVR Sequential Minimal Optimization function through WEKA, while using proper nouns and results of sentiment analysis as features. They conclude that both subjectivety and polarity contribute to the accuracy of stock prices prediction.
+There are also financial applications using sentiment analysis for predicting stock prices. Schumaker \etal~\cite{Schumaker:2009} propose a system, AZFinText, which can predict the stock price of a company that mentioned by a financial news. They asuume financial news will have impact on the decision made within stock buyers, and it will have immediate effect so that the price after 20 minutes the news is released can be predicted. They implemented the SVR Sequential Minimal Optimization function through WEKA \cite{Witten:2005}, while using proper nouns and results of sentiment analysis as features. They conclude that both subjectivety and polarity contribute to the accuracy of stock prices prediction.
 
 \section{Experiment Setup}
 \subsection{Overview}
@@ -119,37 +119,30 @@ Finally, we extract most used unigram in our positve and negative training data,
 \begin{center}
     \begin{tabular}{ | l || l | }
         \hline
-        Apple &  \vbox{\hbox{\strut \#apple, \#iphone, \#iphone4s, \#iphone4,}\hbox{\strut \#siri, \#ipod, \#mac, \#itunes}} \\ \hline
-        Google & \vbox{\hbox{\strut \#google, \#android, \#gmail, \#youtube,}\hbox{\strut \#googleplus, \#gplus, \#googlemap, \#gmap}} \\ \hline
-        Microsoft & \#windows, \#xbox, \#kinect, \#msn \\ \hline
-        Amazon & \#amazon \\ \hline
-        Research in Motion & \#rim, \#blackberry, \#bb \\ \hline
-        Dell & \#dell \\ \hline
-        Intel & \#intel, \#xeon, \#ultrabook \\ \hline
-        Yahoo & \#yahoo, \#yahoomail, \#ymail, \#yim \\ \hline
-        Nvidia & \#nvidia, \#geforce \\ \hline
-        Netflix & \#netflix \\
-        \hline
+        Part-of-speech tags &  \vbox{\hbox{\strut count of: CC, DD, DT, EX, FW, IN,}\hbox{\strut JJ, JJR, JJS, LS, MD,}\hbox{\strut NN, NNS, NNP, NNPS,}\hbox{\strut PDT, POS, PRP, PRP\$,}\hbox{\strut RB, RBR, RBS, RP, SYM, TO, UH,}\hbox{\strut VB, VBD, VBG, VBN, VBP, VBZ,}\hbox{\strut WDT, WP, WP\$, WRB}} \\ \hline
+           Meta-information & \vbox{\hbox{\strut count of: first/second/thrid person pronouns}\hbox{\strut count of commas, colons and semi-colons}\hbox{\strut count of: dashes, parenthses, ellipses}\hbox{\strut count of: wh-words, slang acronyms, words all in upper case}\hbox{\strut average length of sentences (in tokens)}\hbox{\strut average length of tokens (exclude punctuations tokens)}\hbox{\strut number of sentences}} \\ \hline
+        Twitter-specific syntax & count of reply, hashtags \\ \hline
+        Ngram models & unigram trained from training data (frequency or presence) \\ \hline
     \end{tabular}
-\caption{Companies studied in this project and the associated keywords}
+\caption{Features used in classification}
 \label{feature-listing}
 \end{center}
 \end{table}
 
 \subsection{Classification}\label{classification}
-For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Maimum Entropy through machine learning package WEKA.
+For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Maimum Entropy through machine learning package WEKA \cite{Witten:2005}. We will evaluate the accuracy by conducting cross-validation on training data. We will then apply the classifier to our test data. As Pang \etal~\cite{Pang:02} and Go \etal~\cite{Go:09} reported, an accuracy around 80\% for polarity classfier can be expected.
 
 We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $o_i$, where $p_i + n_i + o_i = 1$.
 
 \subsection{Statistical Inference}\label{statistical-inference}
-We will fetch stock prices history from Yahoo Finance.
+Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We will fetch stock prices history from Yahoo Finance for the companies we studied.
 
-Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. Here, cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
+Cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
 
 \section{Limitations}
 Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.
 
-Second, collecting tweets once a week might miss some 'spike'. For instance if an important product released at Wednesday but we happend to collect the data at Saturday morning then we might miss the discussion on that Wednesday. Theoretically we can collect all the tweets in realtime to overcome this problem. However, we are technically limited by storage and Twitter API usage limitation.
+Second, collecting tweets once a week might miss some 'spike'. For instance, if an important product released at Wednesday but we happend to collect the data at Saturday morning then we might miss all the discussions on that Wednesday. Theoretically we can collect all the tweets in realtime to overcome this problem. However, we are technically limited by storage and Twitter API usage limitation.
 
 Finally, the period of collecting tweets is not long enough. Ideally we should collect for at least one or two years of tweets so that we can catch more big event such as important product releases and also reduce the impact of short-term noise.
 
