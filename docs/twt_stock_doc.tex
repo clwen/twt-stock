@@ -107,7 +107,13 @@ Additionally, we will also use the JDPA \cite{JDPA}, which is an annually annota
 For data normalization, we asuume URLs and Twitter-specific features might good features while classifying tweets, we replace all urls to 'URL', hashtag to 'HASHTAG' and reply to 'REPLY'. Afterwards we do tokenization so that each token, including punctuations are splitted by space. Finally, we conduct part-of-speech tagging using NLPlib \cite{NLPlib} by Mark Watson and Jason Wiener.
 
 \subsection{Feature Extraction}\label{feature-extraction}
-Our features can be divided into four categories: count of part-of-speech tags, meta-information, count of twitter-specific syntax, unigram model trained by our training data. We will also propose new features according to our study. Details to be updated in the later check points.
+Our features can be divided into four categories: count of part-of-speech tags, meta-information, count of twitter-specific syntax, unigram model trained by our training data. For count of part-of-speech tags, we will count all the possible tags produced by NLPlib, although we suppose adjective or adverbs might carry more subjective information. We might remove some of relative useless features after initial analysis.
+
+Meta-information includes average length of sentences, average length of tokens, number of sentences, etc., which forms our second category of features. Count of first/second/third person pronouns, punctuations will also be extracted.
+
+We also count Twitter-specific features, which includes hashtags, replies.
+
+Finally, we extract most used unigram in our positve and negative training data, respectively. Since Pang \etal~\cite{Pang:02} reported that examing only the presence rather than counting the frequency of unigram yields better result. We will experiment whether presence of frequency produce better accuracy. In addition, we will also examine the best range of number of features we should use from the trained model.
 
 \subsection{Classification}\label{classification}
 For classification, as Pak \etal~\cite{Pak:10} reported, multinominal Naive Bayes classifier yields the best result, we will use it as a start point.
