@@ -66,6 +66,8 @@ For the reasons stated before, we will mainly use Twitter as our primary corpus.
 
 However, Since Twitter API only allow external users to parse the tweets no longer than a week from the time the data is requested, we will collect the tweets every week from week of Feburuary 13th to the end of this project. We write a script that will automatically fetch the tweets defined by our keywords detailed below in the same time of the week (Saturday morning in our case) to minimize the bias possibly introduced by collecting tweets at different time of a week. For instance, people might feel blue at Monday while happier at Friday night. We also note that it is impractical to get data older than one week by crawl the data directly from Twitter website instead of using the API since the tweets displayed on the website are also not older than one week by our observation, which might due to the technical convinence of Twitter.
 
+The format of data fetched from Twitter API is JSON. We use simplejson of Python to parse the data and extract the text part and time stamp of each tweet.
+
 \subsubsection{Test Data}
 We fetch our test data by querying Twitter API with predefined query tems, which are products or keywords we are interested in. For each companies covered in this study, several keywords are associated as the method we will described later. We includes top tech companies that has sufficient historical stock prices data at NASDAQ. We prefer the consumer-facing companies such as Apple for we can expect there are more discussions on the Internet and hence more meaningful information can be extract. In contrast, we will not include companies that are not mainly targeted at normal consumer, such as IBM. We also note that companies that haven't IPO or just IPO are not included, such as Twitter itself or Facebook.
 
@@ -102,23 +104,25 @@ For objective tweets, we fetch tweets from technology news account since our maj
 Additionally, we will also use the JDPA \cite{JDPA}, which is an annually annotated blog entries about automobiles and cameras, to train our ngram model.
 
 \subsection{Preprocessing}\label{preprocessing}
-For data normalization, we will remove urls, html tags and do tokenization and conduct part-of-speech tagging. We will utilize Python Natural Language Toolkit (NLTK) \cite{NLTK} for this part.
+For data normalization, we asuume URLs and Twitter-specific features might good features while classifying tweets, we replace all urls to 'URL', hashtag to 'HASHTAG' and reply to 'REPLY'. Afterwards we do tokenization so that each token, including punctuations are splitted by space. Finally, we conduct part-of-speech tagging using NLPlib \cite{NLPlib} by Mark Watson and Jason Wiener.
 
 \subsection{Feature Extraction}\label{feature-extraction}
-For feature extraction, we will follow similar principles as assignment one. We will also propose new features according to our study. Details to be updated in the later check points.
+Our features can be divided into four categories: count of part-of-speech tags, meta-information, count of twitter-specific syntax, unigram model trained by our training data. We will also propose new features according to our study. Details to be updated in the later check points.
 
 \subsection{Classification}\label{classification}
 For classification, as Pak \etal~\cite{Pak:10} reported, multinominal Naive Bayes classifier yields the best result, we will use it as a start point.
 
-Finally, we will use statical techniques to evaluate the correlation between consumer opinions and the stock prices. Here, cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
-
 \subsection{Statistical Inference}\label{statistical-inference}
 We will fetch stock prices history from Yahoo Finance.
+
+Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. Here, cannonical correlation analysis will be used to investigate the best transformation between the two sets of data. Since we expect a delaying affect from consumer evaluation to the influence of stocke prices, cross covariance will also be used to detect the time window. For the implementation, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}. Details will be updated later as well.
 
 \section{Limitations}
 Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.
 
 Second, collecting tweets once a week might miss some 'spike'. For instance if an important product released at Wednesday but we happend to collect the data at Saturday morning then we might miss the discussion on that Wednesday. Theoretically we can collect all the tweets in realtime to overcome this problem. However, we are technically limited by storage and Twitter API usage limitation.
+
+Finally, the period of collecting tweets is not long enough. Ideally we should collect for at least one or two years of tweets so that we can catch more big event such as important product releases and also reduce the impact of short-term noise.
 
 \bibliographystyle{abbrv}
 \bibliography{reference}
