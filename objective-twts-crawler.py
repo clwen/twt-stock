@@ -33,6 +33,7 @@ for site in sites:
             of.write(item['created_at'].encode('utf-8', 'ignore').strip() + '\n')
             of.write('|\n') # delimiter of tweets
 
-        time.sleep(30) # being nice to twitter api
+        print 'being nice to twitter, sleep for 3 seconds...'
+        time.sleep(3) # being nice to twitter api
 
     of.close()

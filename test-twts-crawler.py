@@ -61,6 +61,6 @@ if __name__ == '__main__':
             query = '#' + keyword
             outfile = 'tweets/' + company + '_' + keyword
             get_tweets(query, outfile)
-            print 'sleep for three seconds.. being nice to twitter..'
-            time.sleep(3)
+            # print 'sleep for three seconds.. being nice to twitter..'
+            # time.sleep(3)
 

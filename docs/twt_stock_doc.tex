@@ -137,7 +137,28 @@ For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Ma
 We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $b_i$, where $p_i + n_i + b_i = 1$.
 
 \subsection{Statistical Inference}\label{statistical-inference}
-Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We will fetch stock prices history from Yahoo Finance for the companies we studied.
+Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We will fetch stock prices history from Yahoo Finance for the companies we studied. Stock prices is automatically fetched by a Python script to make our framework scalable. Companies studied and stock symbols are noted in Table \ref{companies-symbols}.
+
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | }
+        \hline
+        Apple &  AAPL \\ \hline
+        Google & GOOG \\ \hline
+        Microsoft & MSFT \\ \hline
+        Amazon & AMZN \\ \hline
+        Research in Motion & RIMM \\ \hline
+        Dell & DELL \\ \hline
+        Intel & INTC \\ \hline
+        Yahoo & YHOO \\ \hline
+        Nvidia & NVDA \\ \hline
+        Netflix & NFLX \\
+        \hline
+    \end{tabular}
+\caption{Companies studied in this project and the associated keywords}
+\label{companies-symbols}
+\end{center}
+\end{table}
 
 Our hypothesis is that the companies that receive more positive opinion will eventually get a positive impact on their stock prices. Hence, for a given company, we define the opinion vector as the difference of ratio between positive and negative opnion which represent the postive opnion toward a company $O = [o_i]$, where $o_i = p_i - n_i$, for $i$ from $1$ to $n$. We also have stock prices $S = [s_i]$, for $i$ from $1$ to $n$. The problem we are interested is that whether these two time series are correlated or not. We will use Pearson product-moment correlation coefficient (Pearson coefficient) to verify our hypothesis.
 
