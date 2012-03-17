@@ -1,2 +1,2 @@
 #!/bin/bash
-python build_arff.py postive:positive.twt negative:negative.twt pos_neg.arff
+python build_arff.py positive:subjective/positive.twt negative:subjective/negative.twt pos_neg.arff
