@@ -87,7 +87,7 @@ def extract_features(class_name, twt_file, output_file):
     fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
     sentence_in_tokens = []
 
-    input_path = 'preprocessed/w4/' + twt_file
+    input_path = 'preprocessed/w5/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -166,7 +166,7 @@ if __name__ == '__main__':
         print "Usage: python buildarff.py [class files] [output file]"
         sys.exit()
     # prepare output file according to last argument
-    output_file = 'arffs/w4/' + sys.argv[-1]
+    output_file = 'arffs/w5/' + sys.argv[-1]
     # from 2nd argument to 2nd from the last it's the class definition
     classes = {}
     for i in range(1, len(sys.argv)-1):

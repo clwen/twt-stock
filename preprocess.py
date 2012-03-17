@@ -10,8 +10,8 @@ if __name__ == '__main__':
         print 'usage: python preprocess.py [raw-tweet-file]'
         sys.exit()
 
-    input_path = 'tweets/objective/' + sys.argv[1]
-    output_path = 'preprocessed/objective/' + sys.argv[1] + '.twt'
+    input_path = 'tweets/w5/' + sys.argv[1]
+    output_path = 'preprocessed/w5/' + sys.argv[1] + '.twt'
     of = open(output_path, 'w+')
     tagger = NLPlib()
     lines = open(input_path).readlines()

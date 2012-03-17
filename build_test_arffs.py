@@ -1,6 +1,6 @@
 import os
 
-files = os.listdir('preprocessed/w4/')
+files = os.listdir('preprocessed/w5/')
 for f in files:
     basename = f.split('.')[0]
     arffname = basename + '.arff'

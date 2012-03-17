@@ -2,7 +2,7 @@ import os
 import random
 
 def find_and_replace(file_name, twt_name):
-    file_name = 'w4/' + file_name
+    file_name = 'w5/' + file_name
     newlines = []
     with open(file_name, 'r') as f:
         for line in f.readlines():
@@ -16,7 +16,7 @@ def find_and_replace(file_name, twt_name):
         for line in newlines:
             f.write(line)
 
-files = os.listdir('w4/')
+files = os.listdir('w5/')
 for f in files:
     basename = f.split('.')[0]
     twt_name = basename + '.twt'
