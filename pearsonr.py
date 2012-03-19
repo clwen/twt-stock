@@ -24,8 +24,8 @@ def extract_prices(company):
 
 if __name__ == '__main__':
     for company in companies:
-        # output_path = 'pearsons/' + company
-        # of = open(output_path, 'w')
+        output_path = 'pearsons/' + company
+        of = open(output_path, 'w')
 
         ratios = extract_ratios(company)
         prices = extract_prices(company)
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         print " %s: %s" % (company, pearson)
         print '\t' + str(ratios)
         print '\t' + str(prices)
-        # of.write(str(pearson) + '\n')
-        # of.write(str(ratios) + '\n')
-        # of.write(str(prices) + '\n')
+        of.write(str(pearson) + '\n')
+        of.write(str(ratios) + '\n')
+        of.write(str(prices) + '\n')
 

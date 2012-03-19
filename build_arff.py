@@ -13,6 +13,7 @@ wh_words = ['WDT', 'WP', 'WP$', 'WRB']
 past_words = ['VBD', 'VBN']
 future_words = ['MD']
 slang_words = []
+unigrams = OrderedDict()
 
 def import_words_from_file(filename):
     # import feature word lists
@@ -38,6 +39,16 @@ def extract_feature_words():
     tp_words = import_words_from_file('Third-person')
     conj_words = import_words_from_file('Conjunct')
     slang_words = import_words_from_file('Slang')
+
+def load_unigrams():
+    global unigrams
+    keywords = []
+    with open('ngrams/unigram') as f:
+        lines = f.readlines()
+        for line in lines:
+            keyword = (line.strip(), 0)
+            keywords.append(keyword)
+    unigrams = OrderedDict(keywords)
 
 def all_capital(word):
     return True if len(word) >= 2 and all(c.isupper() for c in word) else False
@@ -182,8 +193,8 @@ if __name__ == '__main__':
     print classes
 
     output_preamble(output_file, classes)
-
     extract_feature_words()
+    load_unigrams()
 
     for (class_name, files) in classes.iteritems():
         for twt_file in files:

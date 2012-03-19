@@ -42,12 +42,12 @@ def remove_obj(obj_file, pos_file):
             f.write(line)
     
 if __name__ == '__main__':
-    files = os.listdir('w2')
+    files = os.listdir('w5')
     for f in files:
         if f == 'obj' or f == 'back' or f.endswith('swp'):
             continue
-        pos_file = 'w2/' + f
+        pos_file = 'w5/' + f
         base_name = f.split('.')[0]
-        obj_file = 'w2/obj/' + base_name + '_obj.txt'
+        obj_file = 'w5/obj/' + base_name + '_obj.txt'
         print pos_file + '\t' + obj_file
         remove_obj(obj_file, pos_file)
