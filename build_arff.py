@@ -49,6 +49,7 @@ def load_unigrams():
             keyword = (line.strip(), 0)
             keywords.append(keyword)
     unigrams = OrderedDict(keywords)
+    print unigrams
 
 def all_capital(word):
     return True if len(word) >= 2 and all(c.isupper() for c in word) else False
@@ -57,38 +58,39 @@ def class_name_defined(s):
     return False if s.find(':') == -1 else True
 
 def output_preamble(output_file, classes):
-    # open output file in open mode
-    f = open(output_file, 'w')
-    # write relation
-    f.write('@relation twt_sentiment_analysis\n\n')
-    # write attributes TODO: can be automatic
-    f.write('@attribute 1st_person numeric\n')
-    f.write('@attribute 2st_person numeric\n')
-    f.write('@attribute 3rd_person numeric\n')
-    f.write('@attribute coordinate_conj numeric\n')
-    f.write('@attribute past_tense numeric\n')
-    f.write('@attribute future_tense numeric\n')
-    f.write('@attribute commas numeric\n')
-    f.write('@attribute colons numeric\n')
-    f.write('@attribute dashes numeric\n')
-    f.write('@attribute parentheses numeric\n')
-    f.write('@attribute ellipses numeric\n')
-    f.write('@attribute common_nouns numeric\n')
-    f.write('@attribute proper_nouns numeric\n')
-    f.write('@attribute adverbs numeric\n')
-    f.write('@attribute wh_words numeric\n')
-    f.write('@attribute slangs numeric\n')
-    f.write('@attribute all_capital numeric\n')
-    f.write('@attribute avg_sentence_in_tokens numeric\n')
-    f.write('@attribute avg_token_in_chars numeric\n')
-    f.write('@attribute sentence_num numeric\n')
-    # write classes
-    class_s = '@attribute twit {' + ', '.join(classes.keys()) + '}\n\n'
-    f.write(class_s)
-    # write data prompt
-    f.write('@data\n')
-    # close output file
-    f.close()
+    global unigrams
+    with open(output_file, 'w') as f:
+        # write relation
+        f.write('@relation twt_sentiment_analysis\n\n')
+        # write attributes TODO: can be automatic
+        f.write('@attribute 1st_person numeric\n')
+        f.write('@attribute 2st_person numeric\n')
+        f.write('@attribute 3rd_person numeric\n')
+        f.write('@attribute coordinate_conj numeric\n')
+        f.write('@attribute past_tense numeric\n')
+        f.write('@attribute future_tense numeric\n')
+        f.write('@attribute commas numeric\n')
+        f.write('@attribute colons numeric\n')
+        f.write('@attribute dashes numeric\n')
+        f.write('@attribute parentheses numeric\n')
+        f.write('@attribute ellipses numeric\n')
+        f.write('@attribute common_nouns numeric\n')
+        f.write('@attribute proper_nouns numeric\n')
+        f.write('@attribute adverbs numeric\n')
+        f.write('@attribute wh_words numeric\n')
+        f.write('@attribute slangs numeric\n')
+        f.write('@attribute all_capital numeric\n')
+        f.write('@attribute avg_sentence_in_tokens numeric\n')
+        f.write('@attribute avg_token_in_chars numeric\n')
+        f.write('@attribute sentence_num numeric\n')
+        # write preambles for unigrams
+        for (unigram, freq) in unigrams.iteritems():
+            f.write("@attribute %s numeric\n" % (unigram))
+        # write classes
+        class_s = '@attribute twit {' + ', '.join(classes.keys()) + '}\n\n'
+        f.write(class_s)
+        # write data prompt
+        f.write('@data\n')
 
 def extract_features(class_name, twt_file, output_file):
     # open output file in append mode
@@ -98,7 +100,7 @@ def extract_features(class_name, twt_file, output_file):
     fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
     sentence_in_tokens = []
 
-    input_path = 'preprocessed/' + twt_file
+    input_path = 'preprocessed/w1/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -192,12 +194,12 @@ if __name__ == '__main__':
         classes[class_name] = files
     print classes
 
-    output_preamble(output_file, classes)
     extract_feature_words()
     load_unigrams()
+    output_preamble(output_file, classes)
 
-    for (class_name, files) in classes.iteritems():
-        for twt_file in files:
-            print '%s, %s' % (class_name, twt_file)
-            extract_features(class_name, twt_file, output_file)
+    # for (class_name, files) in classes.iteritems():
+    #     for twt_file in files:
+    #         print '%s, %s' % (class_name, twt_file)
+    #         extract_features(class_name, twt_file, output_file)
 
