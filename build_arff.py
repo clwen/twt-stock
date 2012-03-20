@@ -49,7 +49,6 @@ def load_unigrams():
             keyword = (line.strip(), 0)
             keywords.append(keyword)
     unigrams = OrderedDict(keywords)
-    print unigrams
 
 def all_capital(word):
     return True if len(word) >= 2 and all(c.isupper() for c in word) else False
@@ -84,7 +83,7 @@ def output_preamble(output_file, classes):
         f.write('@attribute avg_token_in_chars numeric\n')
         f.write('@attribute sentence_num numeric\n')
         # write preambles for unigrams
-        for (unigram, freq) in unigrams.iteritems():
+        for unigram, freq in unigrams.items():
             f.write("@attribute %s numeric\n" % (unigram))
         # write classes
         class_s = '@attribute twit {' + ', '.join(classes.keys()) + '}\n\n'
@@ -99,8 +98,9 @@ def extract_features(class_name, twt_file, output_file):
     # feature count
     fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
     sentence_in_tokens = []
+    global unigrams
 
-    input_path = 'preprocessed/w1/' + twt_file
+    input_path = 'preprocessed/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -160,14 +160,24 @@ def extract_features(class_name, twt_file, output_file):
             # count average length of sentences in tokens
             fcnt['avg_sentence_in_tokens'] = float(sum(sentence_in_tokens)) / len(sentence_in_tokens)
             fcnt['avg_token_in_chars'] = float(sum(len(t) for t in tokens)) / len(tokens) # should exclude punctuation
+            # count for unigram features 
+            for u, v in unigrams.items():
+                if word == u:
+                    unigrams[u] += 1
 
         # write to output file # TODO: use fcnt
-        of.write(','.join(str(f) for f in fcnt.values()) + ',' + class_name + '\n')
+        output_line = ','.join(str(f) for f in fcnt.values())
+        output_line += ',' + ','.join(str(f) for u, f in unigrams.items())
+        output_line += ',' + class_name + '\n'
+        of.write(output_line)
 
         # clean buffer and counters for next tweet
         twt_buf = ''
         fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
         sentence_in_tokens = []
+        # clean unigrams to zeros
+        for u, v in unigrams.items():
+            unigrams[u] = 0
 
     # close output file
     of.close()
@@ -198,8 +208,8 @@ if __name__ == '__main__':
     load_unigrams()
     output_preamble(output_file, classes)
 
-    # for (class_name, files) in classes.iteritems():
-    #     for twt_file in files:
-    #         print '%s, %s' % (class_name, twt_file)
-    #         extract_features(class_name, twt_file, output_file)
+    for (class_name, files) in classes.iteritems():
+        for twt_file in files:
+            print '%s, %s' % (class_name, twt_file)
+            extract_features(class_name, twt_file, output_file)
 
