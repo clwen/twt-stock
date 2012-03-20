@@ -83,8 +83,10 @@ def output_preamble(output_file, classes):
         f.write('@attribute avg_token_in_chars numeric\n')
         f.write('@attribute sentence_num numeric\n')
         # write preambles for unigrams
+        n = 1
         for unigram, freq in unigrams.items():
-            f.write("@attribute %s numeric\n" % (unigram))
+            f.write("@attribute %s numeric\n" % ('unigram' + str(n)))
+            n += 1
         # write classes
         class_s = '@attribute twit {' + ', '.join(classes.keys()) + '}\n\n'
         f.write(class_s)
@@ -100,7 +102,7 @@ def extract_features(class_name, twt_file, output_file):
     sentence_in_tokens = []
     global unigrams
 
-    input_path = 'preprocessed/' + twt_file
+    input_path = 'preprocessed/w5/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -189,7 +191,7 @@ if __name__ == '__main__':
         print "Usage: python buildarff.py [class files] [output file]"
         sys.exit()
     # prepare output file according to last argument
-    output_file = 'arffs/' + sys.argv[-1]
+    output_file = 'arffs/w5/' + sys.argv[-1]
     # from 2nd argument to 2nd from the last it's the class definition
     classes = {}
     for i in range(1, len(sys.argv)-1):

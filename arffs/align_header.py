@@ -1,8 +1,9 @@
+import sys
 import os
 import random
 
-def find_and_replace(file_name, twt_name):
-    file_name = 'w1/' + file_name
+def find_and_replace(week, file_name, twt_name):
+    file_name = week + '/' + file_name
     newlines = []
     with open(file_name, 'r') as f:
         for line in f.readlines():
@@ -16,10 +17,16 @@ def find_and_replace(file_name, twt_name):
         for line in newlines:
             f.write(line)
 
-files = os.listdir('w1/')
-for f in files:
-    basename = f.split('.')[0]
-    twt_name = basename + '.twt'
-    print twt_name
-    find_and_replace(f, twt_name)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print 'usage: python align_header.py [week_number]'
+        print 'ex: python align_header.py w2'
+        sys.exit()
+    cur_week = sys.argv[1]
+    files = os.listdir(cur_week)
+    for f in files:
+        basename = f.split('.')[0]
+        twt_name = basename + '.twt'
+        print twt_name
+        find_and_replace(cur_week, f, twt_name)
     
