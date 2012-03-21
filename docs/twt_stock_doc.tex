@@ -180,9 +180,65 @@ For the implementation of the statistical inference, Python library SciPy \cite{
 \section{Results}
 
 \subsection{Data collected}
-Until the time this report was written, we have collected tweets from Twitter API from xxx to xxx. The number of tweets we collected for each company and keyword are summarized in the following table.
+Until the time this report was written, we have collected tweets from Twitter API from February 18, 2012 to March 17, 2012, five weeks in total. We try to collect tweets at every Saturday morning unless otherwise specified. The time tweets have been collected might varies slightly, which might introduce certain degree of biases (such as people tend to feel blue at Monday morning while significantly happier at Friday night). However, we assume the biases to be minor and will be neglected by now. The number of tweets we collected for each company and keyword are summarized in Table \ref{keywords-tweet-numbers}.
 
-The number of objective tweets collected from technology news and subjective 
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | l | }
+        \hline
+        Apple &  \#apple & 6967 \\ \hline
+        Apple &  \#iphone & 7452 \\ \hline
+        Apple &  \#iphone4s & 7476 \\ \hline
+        Apple &  \#iphone4 & 7485 \\ \hline
+        Apple &  \#siri & 7457 \\ \hline
+        Apple &  \#ipod & 7497 \\ \hline
+        Apple &  \#mac & 7481 \\ \hline
+        Apple &  \#macintosh & 647 \\ \hline
+        Apple &  \#itunes & 7470 \\ \hline
+        Apple &  \#ios & 7470 \\ \hline
+        Google &  \#google & 7290 \\ \hline
+        Google &  \#android & 7484 \\ \hline
+        Google &  \#droid & 7446 \\ \hline
+        Google &  \#googleplus & 7441 \\ \hline
+        Google &  \#gplus & 742 \\ \hline
+        Google &  \#gmail & 4772 \\ \hline
+        Google &  \#youtube & 7444 \\ \hline
+        Google &  \#chrome & 7447 \\ \hline
+        Google &  \#googlemap & 143 \\ \hline
+        Google &  \#gmap & 20 \\ \hline
+        Microsoft &  \#windows & 7474 \\ \hline
+        Microsoft &  \#windows8 & 7463 \\ \hline
+        Microsoft &  \#xbox & 7492 \\ \hline
+        Microsoft &  \#xbox360 & 7451 \\ \hline
+        Microsoft &  \#kinect & 7480 \\ \hline
+        Microsoft &  \#msn & 6752 \\ \hline
+        Microsoft &  \#bing & 7057 \\ \hline
+        Microsoft &  \#ie & 3577 \\ \hline
+        Amazon &  \#amazon & 7442 \\ \hline
+        Amazon &  \#kindle & 7424 \\ \hline
+        Amazon &  \#kindlefire & 7389 \\ \hline
+        Rim &  \#rim & 5989 \\ \hline
+        Rim &  \#blackberry & 7487 \\ \hline
+        Dell &  \#dell & 7460 \\ \hline
+        Intel &  \#intel & 7452 \\ \hline
+        Intel &  \#xeon & 734 \\ \hline
+        Yahoo &  \#yahoo & 7429 \\ \hline
+        Yahoo &  \#yahoomail & 220 \\ \hline
+        Yahoo &  \#ymail & 152 \\ \hline
+        Yahoo &  \#yim & 41 \\ \hline
+        Nvidia &  \#nvidia & 1643 \\ \hline
+        Nvidia &  \#tegra & 688 \\ \hline
+        Nvidia &  \#tegra3 & 284 \\ \hline
+        Nvidia &  \#geforce & 198 \\ \hline
+        Netflix &  \#netflix & 7463 \\ \hline
+        \hline
+    \end{tabular}
+\caption{Companies studied in this project and the associated keywords}
+\label{keywords-tweet-numbers}
+\end{center}
+\end{table}
+
+The number of objective tweets collected from technology news and subjective tweets are collected via querying postive and negative emoticons respectively.
 
 \subsection{Subjectivity Classification}
 Accuracies of different classifiers are summarized in the following table. Since xxx procues the highest result, we use it to produce classification model by using the following command in WEKA:
@@ -206,7 +262,7 @@ If we run Pearson Coeficient tests on this two vectors, the results can be summa
 As we can see, there are high correlated companies as well as the neutral or even negatively correlated companies.
 
 \subsection{Further Works Until the Final Report}
-In the following two weeks, we will do the following: 1) Bigram integration to increase the accuracy of sentiment analysis. 2) Test the optimal number of features in unigrams and bigrams. The reason we didn't conduct the test in this checkpoint is that WEKA encounters out of memory error when there are more than about three hundred features in an arff file. We will try to find a solution for this problem and test the optimal number of features in the following weeks.
+In the following two weeks, we will do the following: 1) Bigram integration to increase the accuracy of sentiment analysis. 2) Test the optimal number of features in unigrams and bigrams. The reason we didn't conduct the test in this checkpoint is that WEKA encounters out of memory error when there are more than about three hundred features in an arff file. We will try to find a solution for this problem and test the optimal number of features in the following weeks. 3) Run Pearson Coefficient analysis on every possible time lag between tweets and stock prices
 
 \section{Limitations}
 Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.
