@@ -175,7 +175,38 @@ The value of Pearson coefficient ranges from $-1$ to $1$. In variables such as s
 
 Another statistical method we would like to use is the coherence of the cross-spectrum. The details will be updated later.
 
-For the implementation of the statistical inference, we will use Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy}.
+For the implementation of the statistical inference, Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy} will be used.
+
+\section{Results}
+
+\subsection{Data collected}
+Until the time this report was written, we have collected tweets from Twitter API from xxx to xxx. The number of tweets we collected for each company and keyword are summarized in the following table.
+
+The number of objective tweets collected from technology news and subjective 
+
+\subsection{Subjectivity Classification}
+Accuracies of different classifiers are summarized in the following table. Since xxx procues the highest result, we use it to produce classification model by using the following command in WEKA:
+
+Then, the model is used to classify tweets in testing sets.
+
+The result of subjective classfication can be summarized as the following table:
+
+\subsection{Polarity Classification}
+Accuracies of different classifiers are summarized in the following table. Since xxx procues the highest result, we use it to produce classification model by using the following command in WEKA:
+
+Then, the model is used to classify tweets in testing sets.
+
+The result of subjective classfication can be summarized as the following table:
+
+\subsection{Statistical Inference}
+We collected the corresponding stock prices from Yahoo! Fianance. The following plots give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices.
+
+If we run Pearson Coeficient tests on this two vectors, the results can be summarized as the following.
+
+As we can see, there are high correlated companies as well as the neutral or even negatively correlated companies.
+
+\subsection{Further Works Until the Final Report}
+In the following two weeks, we will do the following: 1) Bigram integration to increase the accuracy of sentiment analysis. 2) Test the optimal number of features in unigrams and bigrams. The reason we didn't conduct the test in this checkpoint is that WEKA encounters out of memory error when there are more than about three hundred features in an arff file. We will try to find a solution for this problem and test the optimal number of features in the following weeks.
 
 \section{Limitations}
 Here we list some limitations. First, we assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.
@@ -188,7 +219,7 @@ Fourthly, the period of collecting tweets is not long enough. Ideally we should 
 
 Although products of a company is its most important and fundamental to its revenue and thus influence its stock price. However, there are also factors that can influence the price. For example, the plan that Apple decide how to use its crash on March 19, 2012 also influence its price. However, we argue that our system can also take this category of news into account, which can be one of our future work.
 
-\section{Future Directions}
+\section{Conclusions and Future Directions}
 
 Including companies other than technology industry. To be effective evaluated, these companies should have relatively more tweets. Methods that calculate the number of tweets about certain company should be developed.
 

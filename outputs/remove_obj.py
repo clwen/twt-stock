@@ -1,3 +1,4 @@
+import sys
 import os
 
 def build_obj_dic(obj_file):
@@ -42,12 +43,17 @@ def remove_obj(obj_file, pos_file):
             f.write(line)
     
 if __name__ == '__main__':
-    files = os.listdir('w5')
+    if len(sys.argv) != 2:
+        print 'usage: python remove_obj.py [week_num]'
+        print 'ex: python remove_obj.py w2'
+        sys.exit()
+    cur_week = sys.argv[1]
+    files = os.listdir(cur_week)
     for f in files:
         if f == 'obj' or f == 'back' or f.endswith('swp'):
             continue
-        pos_file = 'w5/' + f
+        pos_file = cur_week + '/' + f
         base_name = f.split('.')[0]
-        obj_file = 'w5/obj/' + base_name + '_obj.txt'
+        obj_file = cur_week + '/obj/' + base_name + '_obj.txt'
         print pos_file + '\t' + obj_file
         remove_obj(obj_file, pos_file)
