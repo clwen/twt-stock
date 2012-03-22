@@ -23,17 +23,22 @@ def extract_prices(company):
     return prices
 
 if __name__ == '__main__':
+    pearsons = []
     for company in companies:
         output_path = 'pearsons/' + company
-        of = open(output_path, 'w')
+        # of = open(output_path, 'w')
 
         ratios = extract_ratios(company)
         prices = extract_prices(company)
-        pearson = pearsonr(ratios, prices)
-        print " %s: %s" % (company, pearson)
+        (pearson, pvalue) = pearsonr(ratios, prices)
+        pearsons.append(pearson)
+        output_line = "%s & %s & %s \\\\ \hline\n" % (company, pearson, pvalue)
+        print output_line,
         # print '\t' + str(ratios)
         # print '\t' + str(prices)
-        of.write(str(pearson) + '\n')
-        of.write(str(ratios) + '\n')
-        of.write(str(prices) + '\n')
+        # of.write(str(pearson) + '\n')
+        # of.write(str(ratios) + '\n')
+        # of.write(str(prices) + '\n')
+    pearsons_avg = sum(pearsons) / len(pearsons)
+    print pearsons_avg
 

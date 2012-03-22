@@ -81,15 +81,15 @@ Table \ref{companies-listing} lists the tech companies we would like to study, a
 \begin{center}
     \begin{tabular}{ | l || l | }
         \hline
-        Apple &  \vbox{\hbox{\strut \#apple, \#iphone, \#iphone4s, \#iphone4,}\hbox{\strut \#siri, \#ipod, \#mac, \#itunes}} \\ \hline
-        Google & \vbox{\hbox{\strut \#google, \#android, \#gmail, \#youtube,}\hbox{\strut \#googleplus, \#gplus, \#googlemap, \#gmap}} \\ \hline
-        Microsoft & \#windows, \#xbox, \#kinect, \#msn \\ \hline
-        Amazon & \#amazon \\ \hline
-        Research in Motion & \#rim, \#blackberry, \#bb \\ \hline
+        Apple &  \vbox{\hbox{\strut \#apple, \#iphone, \#iphone4s, \#iphone4,}\hbox{\strut \#siri, \#ipod, \#mac, \#macintosh}\hbox{\strut \#itunes, \#ios}} \\ \hline
+        Google & \vbox{\hbox{\strut \#google, \#android, \#droid, \#chrome,}\hbox{\strut \#gmail, \#youtube, \#googlemap, \#gmap}\hbox{\strut \#googleplus, \#gplus}} \\ \hline
+     Microsoft & \vbox{\hbox{\strut \#windows, \#windows8, \#xbox, \#xbox360,}\hbox{\strut \#kinect, \#msn, \#bing, \#ie}} \\ \hline
+        Amazon & \#amazon, \#kindle, \#kindlefire \\ \hline
+        Research in Motion & \#rim, \#blackberry \\ \hline
         Dell & \#dell \\ \hline
-        Intel & \#intel, \#xeon, \#ultrabook \\ \hline
+        Intel & \#intel, \#xeon \\ \hline
         Yahoo & \#yahoo, \#yahoomail, \#ymail, \#yim \\ \hline
-        Nvidia & \#nvidia, \#geforce \\ \hline
+        Nvidia & \#nvidia, \#tegra, \#tegra3, \#geforce \\ \hline
         Netflix & \#netflix \\
         \hline
     \end{tabular}
@@ -233,33 +233,138 @@ Until the time this report was written, we have collected tweets from Twitter AP
         Netflix &  \#netflix & 7463 \\ \hline
         \hline
     \end{tabular}
-\caption{Companies studied in this project and the associated keywords}
-\label{keywords-tweet-numbers}
+\caption{Number of tweets for each keywords used in test data}
+\label{keywords-tweet-numbers} % TODO: sub-table
 \end{center}
 \end{table}
 
-The number of objective tweets collected from technology news and subjective tweets are collected via querying postive and negative emoticons respectively.
+In addition to test data, we collect 1000 tweets for each technology news site. Subjective tweets are retrieved by querying postive and negative emoticons. The number of positive and negative tweets are 6943 and 7451, respectively.
 
 \subsection{Subjectivity Classification}
-Accuracies of different classifiers are summarized in the following table. Since xxx procues the highest result, we use it to produce classification model by using the following command in WEKA:
+We use different classifiers to run the objectivity classification and choose the one that procues best result to apply to the test data. Accuracies of different classifiers are summarized in Table \ref{classifiers-obj}. Noted that the accuracy achieved by all the three classiers are higher than $90\%$, we suppose it's because objective tweets we retrieve from technology news have some common format and can be quite different from tweets by general users. To have objective tweets that are more similar to the test data might be one of our future work.
 
-Then, the model is used to classify tweets in testing sets.
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | }
+        \hline
+        Naive Bayes &  91.990\% \\ \hline
+        SVM & 93.738\% \\ \hline
+        Decision Tree & 95.989\% \\ \hline
+    \end{tabular}
+\caption{Objectivity classification: accuracy achieved by different classifiers}
+\label{classifiers-obj}
+\end{center}
+\end{table}
 
-The result of subjective classfication can be summarized as the following table:
+Since Decision Tree achieves the best accuracy, we use it to classify the objectivity of the test data. The results are summarized in Table \ref{objectivity-by-company}
+
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | l | l | l | }
+        \hline
+        Company &  \# of Obj Tweets & \# of Subj Tweets & Obj Ratio & Subj Ratio \\ \hline
+        Apple &  60507 & 6895 & 0.897703332245 & 0.102296667755 \\ \hline
+        Google &  44504 & 5725 & 0.886022019152 & 0.113977980848 \\ \hline
+        Microsoft &  48505 & 6241 & 0.886000803712 & 0.113999196288 \\ \hline
+        Amazon &  18649 & 3606 & 0.837968995731 & 0.162031004269 \\ \hline
+        Research in Motion  &  11920 & 1556 & 0.884535470466 & 0.115464529534 \\ \hline
+        Dell &  6759 & 701 & 0.906032171582 & 0.0939678284182 \\ \hline
+        Intel &  7642 & 544 & 0.933545076961 & 0.0664549230393 \\ \hline
+        Yahoo &  6573 & 1269 & 0.83817903596 & 0.16182096404 \\ \hline
+        Nvidia &  2620 & 193 & 0.931389975116 & 0.0686100248845 \\ \hline
+        Netflix &  6606 & 857 & 0.885166822993 & 0.114833177007 \\ \hline
+    \end{tabular}
+\caption{Objectivity classification results by company}
+\label{objectivity-by-company}
+\end{center}
+\end{table}
+
+As one can see, almost all of the raios of objectivity are around $90\%$, which is a fairly high ratio. It can also be justified by our intuition that most of people tweets for sharing information, while small portion of them are expressing their own opinion.
 
 \subsection{Polarity Classification}
-Accuracies of different classifiers are summarized in the following table. Since xxx procues the highest result, we use it to produce classification model by using the following command in WEKA:
+Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since Decision Tree achieves the highest accuracy, we will then apply this to classify the polarity of test data.
 
-Then, the model is used to classify tweets in testing sets.
+Note that in our experiment, we discovered that Decision Tree outperformed SVM, which is different from what reported by previous works. For Decision Tree, weka.classifiers.trees.J48are used here.
 
-The result of subjective classfication can be summarized as the following table:
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | }
+        \hline
+        Naive Bayes &  66.079\% \\ \hline
+        SVM & 73.549\% \\ \hline
+        Decision Tree & 76.1498\% \\ \hline
+    \end{tabular}
+\caption{Polarity classification: accuracy achieved by different classifiers}
+\label{classifiers-polarity}
+\end{center}
+\end{table}
+
+Also we noted that the accuracy we achived in similar method that test on Tweets is comparable but slightly lower than that of Go \etal \cite{Go:09}. We suppose the reasons are that we haven't tune our feature size and training size to its best.
+
+Then, the model is used to classify tweets in testing sets. The result of polarity classfication can be summarized as Table \ref{polarity-by-company}.
+
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | l || l | l | l | l | }
+        \hline
+        Company &  \# of Pos Tweets & \# of Neg Tweets & Pos Ratio & Neg Ratio \\ \hline
+        Apple &  4953 & 1942 & 0.718346627991 & 0.281653372009 \\ \hline
+        Google &  4470 & 1255 & 0.780786026201 & 0.219213973799 \\ \hline
+        Microsoft &  4764 & 1477 & 0.76333920846 & 0.23666079154 \\ \hline
+        Amazon &  2310 & 1296 & 0.640599001664 & 0.359400998336 \\ \hline
+        Research in Motion &  1050 & 506 & 0.674807197943 & 0.325192802057 \\ \hline
+        Dell &  529 & 172 & 0.754636233951 & 0.245363766049 \\ \hline
+        Intel &  473 & 71 & 0.869485294118 & 0.130514705882 \\ \hline
+        Yahoo &  1035 & 234 & 0.815602836879 & 0.184397163121 \\ \hline
+        Nvidia &  144 & 49 & 0.746113989637 & 0.253886010363 \\ \hline
+        Netflix &  643 & 214 & 0.750291715286 & 0.249708284714 \\ \hline
+    \end{tabular}
+\caption{Polarity classification results by company}
+\label{polarity-by-company}
+\end{center}
+\end{table}
+
+As one can see, most of the positive ratios are around $60\%$ to $80\%$. Amazon and Research in Motion have the lowest rate of positiivty. Probably because their main products Kindle and BlackBerry are relatively not positively rated by consumers. 
+
+In contrast, Intel has the highest rate of positivity. However, we also note that the company also has the highest rate of objectivity. It might due to the fact that most of users tweet about Intel mainly for sharing information, instead of expressing their opinion toward the company or its products.
+
+Yahoo also has one of the highest rates in positivity, which is slightly contrast to our expectation, in regards of the company's recent performance in innovation. However, if taking a look at tweets collected for the company, one will note that there is a fair amount of tweets are actually news shared from Yahoo News, rather than a Tweet that directly evaluate the company or its products. It might introduce bias to our analysis. Finding a better mechanism for collecting Tweets that directly related to evaluations of companies might also be one of our future work.
 
 \subsection{Statistical Inference}
-We collected the corresponding stock prices from Yahoo! Fianance. The following plots give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices.
+We collected the corresponding stock prices from Yahoo! Fianance. The following plots give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week five.
 
-If we run Pearson Coeficient tests on this two vectors, the results can be summarized as the following.
+If we run Pearson Coeficient tests on this two vectors, the results can be summarized as Table \ref{coefficients-by-company}.
 
-As we can see, there are high correlated companies as well as the neutral or even negatively correlated companies.
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | c || c | c | }
+        \hline
+        Company & Pearson Correlation Coefficient & 2-tailed p-value \\ \hline
+        Apple & -0.23321991309 & 0.705769465003 \\ \hline
+        Google & -0.295386442458 & 0.62944549743 \\ \hline
+        Microsoft & 0.847974772848 & 0.0695100027267 \\ \hline
+        Amazon & -0.485923462351 & 0.406595748044 \\ \hline
+        Research in Motion & 0.883571377075 & 0.0468478552635 \\ \hline
+        Dell & -0.751943424184 & 0.142659653387 \\ \hline
+        Intel & 0.508100012417 & 0.382094966697 \\ \hline
+        Yahoo & 0.975050083588 & 0.00471308700587 \\ \hline
+        Nvidia & 0.549784427149 & 0.337059380781 \\ \hline
+        Netflix & -0.362395590277 & 0.548892218988 \\ \hline
+    \end{tabular}
+\caption{Pearson Coefficients analysis by company}
+\label{coefficients-by-company}
+\end{center}
+\end{table}
+
+As one can see from the table, there are high correlated companies such as Yahoo, Microsoft or Research in Motion, however, there are also companies seemingly uncorrealted in sentiment analysis and stock prices, or even negatively correalted such as Dell or Amazon.
+
+There might be several explanations for the result. First, our assumption is that product evaluation is crucial to the financial success to a company. However, it is not a practical assumption that the financial success is totally affected by only the competitiveness of products. Hence, product evaluation, which is a sampling toward product competitiveness will also not be the only factor that correlated with stock prices.
+
+In addition, the Tweets we collected for study are also a sampling toward product evaluations. We collected the data basically by following some intuitive rules and we have not yet quantitatively verify the representiveness of this sampling. Besides, it is more reasonable to assume that the effect of product evaluation will take part in stock prices in the long term. However, due to technical restrictions, we have collected only a few weeks as proof-of-concept study.
+
+Finally, we envision that there are quite a few rooms for the improvement for the accuracy of sentiment analysis. The accuracy in our study is around $70\%$ to $80\%$, which is still far from perfect.
+
+However, we also want to note that the average of Pearson Coefficients from the study is $0.164$, which means there is an overall slight positive correalation. If one would like to incorporate our result to systems such as automatic trading system, the system may still benifited from the analysis we conducted here. In addition, we also believe that the positve correalation may improve as we find more sophiscated mechanisms to handle the limitations mentioned above.
 
 \subsection{Further Works Until the Final Report}
 In the following two weeks, we will do the following: 1) Bigram integration to increase the accuracy of sentiment analysis. 2) Test the optimal number of features in unigrams and bigrams. The reason we didn't conduct the test in this checkpoint is that WEKA encounters out of memory error when there are more than about three hundred features in an arff file. We will try to find a solution for this problem and test the optimal number of features in the following weeks. 3) Run Pearson Coefficient analysis on every possible time lag between tweets and stock prices
