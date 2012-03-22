@@ -7,6 +7,8 @@
 \date{\today}
 
 \documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{subfigure}
 \fontfamily{ptm}
 
 \begin{document}
@@ -331,7 +333,29 @@ In contrast, Intel has the highest rate of positivity. However, we also note tha
 Yahoo also has one of the highest rates in positivity, which is slightly contrast to our expectation, in regards of the company's recent performance in innovation. However, if taking a look at tweets collected for the company, one will note that there is a fair amount of tweets are actually news shared from Yahoo News, rather than a Tweet that directly evaluate the company or its products. It might introduce bias to our analysis. Finding a better mechanism for collecting Tweets that directly related to evaluations of companies might also be one of our future work.
 
 \subsection{Statistical Inference}
-We collected the corresponding stock prices from Yahoo! Fianance. The following plots give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week five.
+We collected the corresponding stock prices from Yahoo! Fianance. Figure \ref{xyplots-ratio-price} and Figure \ref{xyplots-ratio-price-02} give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week five.
+
+\begin{figure}
+\centering
+    \subfigure[]{\includegraphics[scale=0.4]{figs/apple_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/google_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/microsoft_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/amazon_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/rim_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/dell_plot.eps}}
+\caption{XY plots for ratios of positive Tweets and stock prices}
+\label{xyplots-ratio-price}
+\end{figure}
+
+\begin{figure}
+\centering
+    \subfigure[]{\includegraphics[scale=0.4]{figs/intel_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/yahoo_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/nvidia_plot.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/netflix_plot.eps}}
+\caption{XY plots for ratios of positive Tweets and stock prices (Con't)}
+\label{xyplots-ratio-price-02}
+\end{figure}
 
 If we run Pearson Coeficient tests on this two vectors, the results can be summarized as Table \ref{coefficients-by-company}.
 
