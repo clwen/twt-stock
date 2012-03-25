@@ -14,6 +14,7 @@ past_words = ['VBD', 'VBN']
 future_words = ['MD']
 slang_words = []
 unigrams = OrderedDict()
+# bigrams = OrderedDict()
 
 def import_words_from_file(filename):
     # import feature word lists
@@ -49,6 +50,16 @@ def load_unigrams():
             keyword = (line.strip(), 0)
             keywords.append(keyword)
     unigrams = OrderedDict(keywords)
+
+def load_bigrams():
+    global bigrams
+    keywords = []
+    with open('bigrams/bigrams') as f:
+        lines = f.readlines()
+        for line in lines:
+            keyword = (line.strip(), 0)
+            keywords.append(keyword)
+    bigrams = OrderedDict(keywords)
 
 def all_capital(word):
     return True if len(word) >= 2 and all(c.isupper() for c in word) else False
@@ -87,11 +98,28 @@ def output_preamble(output_file, classes):
         for unigram, freq in unigrams.items():
             f.write("@attribute %s numeric\n" % ('unigram' + str(n)))
             n += 1
+        # write preambles for bigrams
+        # n = 1
+        # for bigram, freq in bigrams.items():
+        #     f.write("@attribute %s numeric\n" % ('bigram' + str(n)))
+        #     n += 1
         # write classes
         class_s = '@attribute twit {' + ', '.join(classes.keys()) + '}\n\n'
         f.write(class_s)
         # write data prompt
         f.write('@data\n')
+
+def count_bigram_features(line):
+    global bigrams
+    tokens = line.split()
+    for i in range(0, len(tokens)-1):
+        first_token = tokens[i].split('/')[0].lower()
+        second_token = tokens[i+1].split('/')[0].lower()
+        cur_bigram = "%s %s" % (first_token, second_token)
+        for bigram, freq in bigrams.items():
+            if cur_bigram == bigram:
+                # print 'got bigram %s' % (cur_bigram)
+                bigrams[cur_bigram] += 1
 
 def extract_features(class_name, twt_file, output_file):
     # open output file in append mode
@@ -101,8 +129,9 @@ def extract_features(class_name, twt_file, output_file):
     fcnt = OrderedDict([('first_person', 0), ('second_person', 0), ('third_person', 0), ('conjunction', 0), ('past_tense', 0), ('future_tense', 0), ('comma', 0), ('colon', 0), ('dash', 0), ('parentheses', 0), ('ellipse', 0), ('common_noun', 0), ('proper_noun', 0), ('adverb', 0), ('wh', 0), ('slang', 0), ('all_capital', 0), ('avg_sentence_in_tokens', 0), ('avg_token_in_chars', 0), ('sentence_num', 0)])
     sentence_in_tokens = []
     global unigrams
+    # global bigrams
 
-    input_path = 'preprocessed/w5/' + twt_file
+    input_path = 'preprocessed/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -166,10 +195,13 @@ def extract_features(class_name, twt_file, output_file):
             for u, v in unigrams.items():
                 if word == u:
                     unigrams[u] += 1
+        # count for bigram features
+        # count_bigram_features(twt_buf)
 
         # write to output file # TODO: use fcnt
         output_line = ','.join(str(f) for f in fcnt.values())
         output_line += ',' + ','.join(str(f) for u, f in unigrams.items())
+        # output_line += ',' + ','.join(str(f) for u, f in bigrams.items())
         output_line += ',' + class_name + '\n'
         of.write(output_line)
 
@@ -180,6 +212,9 @@ def extract_features(class_name, twt_file, output_file):
         # clean unigrams to zeros
         for u, v in unigrams.items():
             unigrams[u] = 0
+        # clean bigrams to zeros
+        # for u, v in bigrams.items():
+        #     bigrams[u] = 0
 
     # close output file
     of.close()
@@ -191,7 +226,7 @@ if __name__ == '__main__':
         print "Usage: python buildarff.py [class files] [output file]"
         sys.exit()
     # prepare output file according to last argument
-    output_file = 'arffs/w5/' + sys.argv[-1]
+    output_file = 'arffs/' + sys.argv[-1]
     # from 2nd argument to 2nd from the last it's the class definition
     classes = {}
     for i in range(1, len(sys.argv)-1):
@@ -208,6 +243,7 @@ if __name__ == '__main__':
 
     extract_feature_words()
     load_unigrams()
+    # load_bigrams()
     output_preamble(output_file, classes)
 
     for (class_name, files) in classes.iteritems():

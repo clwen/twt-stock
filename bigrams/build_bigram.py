@@ -34,6 +34,6 @@ if __name__ == '__main__':
     print len(bigrams)
 
     # write bigrams to file
-    with open('bigram', 'w') as f:
+    with open('bigrams', 'w') as f:
         for u in bigrams:
             f.write(u + '\n')
