@@ -1,4 +1,4 @@
-\title{CSC 2511 Project: Predicting Stock Prices using Opnion Mining and Setiment Analysis of Twitter Data}
+\title{Correlation between Twitter Sentiment Analysis and Stock Prices}
 \author{
     Chung-Lin Wen \\
     Department of Computer Science \\
@@ -15,6 +15,10 @@
 \maketitle
 
 \input{defs}
+
+\begin{abstract}
+The rapid populization of social networks made it possible to understand how consumers evaluate a company and their products directly. In this project we evaluate whether the insights collected from Twitter help us understand how stock prices might variate. We conducted sentment analysis on Tweets collected by querying Twitter API with predefined keywords associate with companies we are interested. Unigrams extracted from Tweets collected by querying with emoticons along with part-of-speech tags, metadata such as sentence length are used as features for a two-phase objectivity and polarity classification. Random Forest was used for classification and accuracies that comparable to previous works are achieved. We then verify whether the result of sentment analysis correlated with stock prices by calculating Pearson correlation coefficients. We found overall positive correlation between this two factors. In the future, we hope to derive an automatic keyword extraction mechanism and apply the same experiment to other companies and other industries.
+\end{abstract}
 
 \section{Introduction}
 The rapid populization of social networks made it possible to understand the opinion directly from consumers, without doing additional polls or surveys. The opnion from consumer is important because it reflects how they evaluate the product. It is highly possible they will shop from the same company only if they have an overall positive experience about the products/services they paid, otherwise, they might turn to other alternatives. Additionally, the public opnion will also influence the shopping behavior of their friends, family, collegues, whoever their connection is, which is especially true on the social networks. All of these buying decisions will eventually generate revenue or incur losses for the companies, depending on whether their consumers are happy or not. Hence, it is a reasonable assumption that the performance of a company can be predicted by consumer opinions to some extent, which is especially true if we have sufficient amount of data. 
@@ -311,9 +315,9 @@ Since Decision Tree achieves the best accuracy, we use it to classify the object
 As one can see, almost all of the ratios of objectivity are around $90\%$, which is a fairly high ratio. It can also be justified by our intuition that most of people tweets for sharing information, while small portion of them are expressing their own opinion.
 
 \subsection{Polarity Classification}
-Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since Decision Tree achieves the highest accuracy, we will then apply the classifier to predict the polarity of test data.
+Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since the Random Forest achieves the highest accuracy, we will then apply the classifier to predict the polarity of test data.
 
-Note that in our experiment, we discovered that Decision Tree outperformed SVM, which is different from what reported by previous works. In implementation, $weka.classifiers.trees.J48$ are used for Decision Tree.
+Note that in our experiment, we discovered that the Random Forest outperformed SVM, which is different from what reported by previous works. In implementation, $weka.classifiers.trees.RandomForest$ are used for the Random Forest.
 
 \begin{table}
 \begin{center}
@@ -324,6 +328,7 @@ Note that in our experiment, we discovered that Decision Tree outperformed SVM, 
         Naive Bayes &  65.5642\% \\ \hline
         SVM & 71.9609\% \\ \hline
         Decision Tree & 76.3243\% \\ \hline
+        Random Forest & 79.1518\% \\ \hline
     \end{tabular}
 \caption{Polarity classification: accuracy achieved by different classifiers}
 \label{classifiers-polarity}
@@ -382,6 +387,55 @@ We have also tried to include bigrams as featuers. We included 123 unique bigram
 \end{table}
 
 As we can see, the inclusion of bigram will only produce a slight improvement toward in terms of accuracy when using a Naive Bayes or SVM classifier. However, it introduce a drop in accuracy when using a Decision Tree classifier. This observation also align with that of Pang \etal~\cite{Pang:02}. In order to avoid overfitting and to maintain a simpler structure of features, we will not use bigrams in the following procedures.
+
+\subsection{Optimal Feature Size}
+
+We have also tested under different size of unigram features for four classifiers we use. The accuracies achieved can be summarized as Figure \ref{classifiers-feature-size} and Table \ref{classifiers-feature-size-tbl}. Several conclusions can be drawn: First, the overall performance of Random Forest are better than that of the other classifiers. Second, the performance of Random Forest peaked at feature size around $1000$. Hence, we choose this as our feature size in the polarity classification. Specifically speaking, it was $1043$, which extract $800$ features from positive, negative training set respectively and remove the overlapping ones.
+
+\begin{figure}
+\centering
+    \subfigure[]{\includegraphics[scale=0.4]{figs/bayes.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/svm.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/tree.eps}}
+    \subfigure[]{\includegraphics[scale=0.4]{figs/forest.eps}}
+\caption{The accuracies achieved by different classfiers in different feature size}
+\label{classifiers-feature-size}
+\end{figure}
+
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | c || c | c | c | c | }
+        \hline
+        \textbf{Feature Size} & \textbf{Naive Bayes} & \textbf{SVM} & \textbf{Decision Tree} & \textbf{Random Forest} \\ \hline
+        \hline
+        117 & 65.2937\% & 71.7253\% & 75.9665\% & 78.8376\% \\ \hline
+        244 & 65.6776\% & 72.7463\% & 76.3941\% & 79.1518\% \\ \hline
+        370 & 65.7474\% & 73.235\% & 76.7344\% & 79.3612\% \\ \hline
+        493 & 65.8085\% & 74.3171\% & 76.7432\% & 79.5619\% \\ \hline
+        627 & 65.826\% & 74.6226\% & 76.7868\% & 79.623\% \\ \hline
+        760 & 65.9656\% & 74.8931\% & 76.7344\% & 79.2041\% \\ \hline
+        891 & 65.9918\% & 75.0676\% & 76.6385\% & 79.2739\% \\ \hline
+        1043 & 65.9918\% & 75.6087\% & 76.7083\% & 79.6492\% \\ \hline
+        1182 & 66.018\% & 75.7396\% & 76.7083\% & 78.5845\% \\ \hline
+        1331 & 66.0267\% & 75.6785\% & 76.717\% & 78.8725\% \\ \hline
+        1467 & 66.0267\% & 75.8007\% & 76.4552\% & 79.6405\% \\ \hline
+        1609 & 66.0354\% & 76.1323\% & 76.4901\% & 79.431\% \\ \hline
+        1762 & 66.0267\% & 75.9141\% & 76.621\% & 79.0121\% \\ \hline
+        1930 & 66.0354\% & 76.2894\% & 76.6035\% & 79.3176\% \\ \hline
+        2084 & 66.0442\% & 76.6734\% & 76.6297\% & 79.3961\% \\ \hline
+        2240 & 66.0616\% & 76.6123\% & 76.6559\% & 79.3612\% \\ \hline
+        2400 & 66.0616\% & 76.8392\% & 76.6385\% & 79.1692\% \\ \hline
+        2543 & 66.0616\% & 77.0486\% & 76.6385\% & 79.1518\% \\ \hline
+        2693 & 66.0616\% & 77.0224\% & 76.6559\% & 79.527\% \\ \hline
+        2848 & 66.0616\% & 77.0486\% & 76.6734\% & 79.3088\% \\ \hline
+    \end{tabular}
+\caption{The accuracies achieved by different classfiers in different feature size}
+\label{classifiers-feature-size-tbl}
+\end{center}
+\end{table}
+
+
+We also note that the optimal feature size of bigrams can also be examined in similar setup. We will leave this as one of the future works.
 
 \subsection{Statistical Inference}
 We collected the corresponding stock prices from the Yahoo! Finance. Figure \ref{xyplots-ratio-price} and Figure \ref{xyplots-ratio-price-02} give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week five.
