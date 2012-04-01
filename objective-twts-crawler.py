@@ -24,7 +24,9 @@ for site in sites:
             try:
                 j = simplejson.loads(r.content)
             except simplejson.decoder.JSONDecodeError:
-                print 'oops, got no response from twitter, try again'
+                print 'oops, got no response from twitter'
+                print 'sleep for 120 seconds and try again'
+                time.sleep(120)
                 continue
             success = True
         
