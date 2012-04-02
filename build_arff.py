@@ -121,7 +121,7 @@ def count_bigram_features(line):
                 # print 'got bigram %s' % (cur_bigram)
                 bigrams[cur_bigram] += 1
 
-def extract_features(class_name, twt_file, output_file):
+def extract_features(class_name, twt_file, week, output_file):
     # open output file in append mode
     of = open(output_file, 'a')
 
@@ -131,7 +131,7 @@ def extract_features(class_name, twt_file, output_file):
     global unigrams
     # global bigrams
 
-    input_path = 'preprocessed/w2/' + twt_file
+    input_path = 'preprocessed/' + week + '/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -222,14 +222,17 @@ def extract_features(class_name, twt_file, output_file):
 if __name__ == '__main__':
     # parse arguments
     # if only one argument provided, ask user to run it again
-    if len(sys.argv) <= 1:
-        print "Usage: python buildarff.py [class files] [output file]"
+    if len(sys.argv) <= 2:
+        print "usage: python buildarff.py [class files] [week] [output file]"
+        print "ex: python buildarff.py apple_iphone.twt w6 apple_iphone.arff"
         sys.exit()
+    # get current week number
+    week = sys.argv[-2]
     # prepare output file according to last argument
-    output_file = 'arffs/w2/' + sys.argv[-1]
+    output_file = 'arffs/' + week + '/' + sys.argv[-1]
     # from 2nd argument to 2nd from the last it's the class definition
     classes = {}
-    for i in range(1, len(sys.argv)-1):
+    for i in range(1, len(sys.argv)-2):
         cur_arg = sys.argv[i]
         if class_name_defined(cur_arg):
             arg_splitted = cur_arg.split(':')
@@ -249,5 +252,5 @@ if __name__ == '__main__':
     for (class_name, files) in classes.iteritems():
         for twt_file in files:
             print '%s, %s' % (class_name, twt_file)
-            extract_features(class_name, twt_file, output_file)
+            extract_features(class_name, twt_file, week, output_file)
 
