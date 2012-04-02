@@ -131,7 +131,7 @@ def extract_features(class_name, twt_file, output_file):
     global unigrams
     # global bigrams
 
-    input_path = 'preprocessed/' + twt_file
+    input_path = 'preprocessed/w2/' + twt_file
     # read lines from .twt file
     lines = open(input_path).readlines()
     # process lines one by one
@@ -226,7 +226,7 @@ if __name__ == '__main__':
         print "Usage: python buildarff.py [class files] [output file]"
         sys.exit()
     # prepare output file according to last argument
-    output_file = 'arffs/' + sys.argv[-1]
+    output_file = 'arffs/w2/' + sys.argv[-1]
     # from 2nd argument to 2nd from the last it's the class definition
     classes = {}
     for i in range(1, len(sys.argv)-1):

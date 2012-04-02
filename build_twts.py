@@ -1,7 +1,7 @@
 import os
 
 if __name__ == '__main__':
-    target_dir = 'tweets/w6/'
+    target_dir = 'tweets/w7/'
     # traverse tweets dir, for each file
     for filename in os.listdir(target_dir):
         if filename[0] == '.': # skip the swp file
