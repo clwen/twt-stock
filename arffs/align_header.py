@@ -2,7 +2,7 @@ import sys
 import os
 import random
 
-weeks = ['w1']
+weeks = ['w2', 'w3', 'w4', 'w5', 'w6', 'w7']
 
 def find_and_replace(week, file_name, twt_name):
     file_name = week + '/' + file_name
@@ -26,10 +26,11 @@ if __name__ == '__main__':
     #     sys.exit()
     
     for week in weeks:
+        print week
         files = os.listdir(week)
         for f in files:
             basename = f.split('.')[0]
             twt_name = basename + '.twt'
-            print twt_name
+            print '\t' + twt_name
             find_and_replace(week, f, twt_name)
     
