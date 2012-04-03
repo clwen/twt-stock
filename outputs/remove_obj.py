@@ -1,6 +1,8 @@
 import sys
 import os
 
+weeks = ['w1']
+
 def build_obj_dic(obj_file):
     obj_dic = {}
     with open(obj_file, 'r') as f:
@@ -43,17 +45,14 @@ def remove_obj(obj_file, pos_file):
             f.write(line)
     
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print 'usage: python remove_obj.py [week_num]'
-        print 'ex: python remove_obj.py w2'
-        sys.exit()
-    cur_week = sys.argv[1]
-    files = os.listdir(cur_week)
-    for f in files:
-        if f == 'obj' or f == 'back' or f.endswith('swp'):
-            continue
-        pos_file = cur_week + '/' + f
-        base_name = f.split('.')[0]
-        obj_file = cur_week + '/obj/' + base_name + '_obj.txt'
-        print pos_file + '\t' + obj_file
-        remove_obj(obj_file, pos_file)
+    for week in weeks:
+        files = os.listdir(week)
+        print files
+        for f in files:
+            if f == 'obj' or f == 'back' or f.endswith('swp'):
+                continue
+            pos_file = week + '/' + f
+            base_name = f.split('.')[0]
+            obj_file = week + '/obj/' + base_name + '_obj.txt'
+            print pos_file + '\t' + obj_file
+            remove_obj(obj_file, pos_file)
