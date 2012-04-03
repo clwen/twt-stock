@@ -1,8 +1,10 @@
 import os
 import random
 
-def find_and_replace(file_name, twt_name):
-    file_name = 'w5/' + file_name
+weeks = ['w2', 'w3', 'w4', 'w5', 'w6', 'w7']
+
+def find_and_replace(file_name, week, twt_name):
+    file_name = week + '/' + file_name
     newlines = []
     with open(file_name, 'r') as f:
         for line in f.readlines():
@@ -13,10 +15,13 @@ def find_and_replace(file_name, twt_name):
         for line in newlines:
             f.write(line)
 
-files = os.listdir('w5/')
-for f in files:
-    basename = f.split('.')[0]
-    twt_name = basename + '.twt'
-    print twt_name
-    find_and_replace(f, twt_name)
+if __name__ == '__main__':
+    for week in weeks:
+        print week
+        files = os.listdir(week)
+        for f in files:
+            basename = f.split('.')[0]
+            twt_name = basename + '.twt'
+            print '\t' + twt_name
+            find_and_replace(f, week, twt_name)
     

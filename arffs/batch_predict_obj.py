@@ -1,10 +1,14 @@
 import os
 
-files = os.listdir('w5')
-for f in files:
-    base_name = f.split('.')[0]
-    arff_file = 'w5/' + f
-    output_file = '../outputs/w5/obj/' + base_name + '_obj.txt'
-    cmd = 'java -cp ~/Applications/weka36/weka.jar weka.classifiers.functions.SMO -p 21 -l obj_subj.model -T %s > %s' % (arff_file, output_file)
-    print cmd
-    os.system(cmd)
+weeks = ['w2', 'w3', 'w4', 'w5', 'w6', 'w7']
+
+if __name__ == '__main__':
+    for week in weeks:
+        files = os.listdir(week)
+        for f in files:
+            base_name = f.split('.')[0]
+            arff_file = week + '/' + f
+            output_file = '../outputs/%s/obj/%s_obj.txt' % (week, base_name)
+            cmd = 'java -Xms512m -Xmx1024m -cp ~/Applications/weka36/weka.jar weka.classifiers.trees.RandomForest -p 1064 -l obj_subj.model -T %s > %s' % (arff_file, output_file)
+            print cmd
+            os.system(cmd)

@@ -271,7 +271,7 @@ We have also tried to verify Zipf's law on the test data. The ranks and freqenci
 In addition to test data, we collected 1000 tweets for each technology news site choosed. Subjective tweets are retrieved by querying positive and negative emoticons such as ':)' or ':('. The number of positive and negative Tweets are 6943 and 7451, respectively.
 
 \subsection{Subjectivity Classification}
-We use different classifiers to run the objectivity classification and choose the one that produces best result that will be applied to test data. Accuracies of different classifiers are summarized in Table \ref{classifiers-obj}. We observed that the accuracy achieved by all the three classiers are higher than $90\%$. It might due to the fact that objective Tweets retrieved from technology news have some common format and can be quite distinguishable from Tweets by general users. To have objective Tweets that are more similar to the test data should be one of our future works.
+We use different classifiers to run the objectivity classification and choose the one that produces best result that will be applied to test data. Accuracies of different classifiers are summarized in Table \ref{classifiers-obj}. We observed that the accuracy achieved by all the four classiers are higher than $90\%$. It might due to the fact that objective Tweets retrieved from technology news have some common format and can be quite distinguishable from Tweets by general users. To have objective Tweets that are more similar to the test data should be one of our future works.
 
 \begin{table}
 \begin{center}
@@ -282,13 +282,14 @@ We use different classifiers to run the objectivity classification and choose th
         Naive Bayes &  91.990\% \\ \hline
         SVM & 93.738\% \\ \hline
         Decision Tree & 95.989\% \\ \hline
+        Random Forest & 96.927\% \\ \hline
     \end{tabular}
 \caption{Objectivity classification: accuracy achieved by different classifiers}
 \label{classifiers-obj}
 \end{center}
 \end{table}
 
-Since Decision Tree achieves the best accuracy, we use it to classify the objectivity of the test data. The results are summarized in Table \ref{objectivity-by-company}
+Since the Random Forest achieves the best accuracy, we use it to classify the objectivity of the test data. The results are summarized in Table \ref{objectivity-by-company}
 
 \begin{table}
 \begin{center}
