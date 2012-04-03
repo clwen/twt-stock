@@ -1,7 +1,7 @@
 import os
 
 companies = ['apple', 'google', 'microsoft', 'amazon', 'rim', 'dell', 'intel', 'yahoo', 'nvidia', 'netflix']
-weeks = ['w1', 'w2', 'w3', 'w4', 'w5']
+weeks = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7']
 
 def count_pos_neg(week, fname):
     pos_num = 0

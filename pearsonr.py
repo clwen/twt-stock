@@ -12,7 +12,7 @@ def extract_ratios(company):
     return ratios
 
 def extract_prices(company):
-    week_num = 5 # number of weeks to parse
+    week_num = 7 # number of weeks to parse
     prices = []
     price_file = 'stock-prices/' + company + '.csv'
     lines = open(price_file, 'r').readlines()
