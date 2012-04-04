@@ -17,7 +17,7 @@
 \input{defs}
 
 \begin{abstract}
-The rapid populization of social networks made it possible to understand how consumers evaluate a company and their products directly. In this project we evaluate whether the insights collected from Twitter help us understand how stock prices might variate. We conducted sentment analysis on Tweets collected by querying Twitter API with predefined keywords associate with companies we are interested. Unigrams extracted from Tweets collected by querying with emoticons along with part-of-speech tags, metadata such as sentence length are used as features for a two-phase objectivity and polarity classification. Random Forest was used for classification and accuracies that comparable to previous works are achieved. We then verify whether the result of sentment analysis correlated with stock prices by calculating Pearson correlation coefficients. We found overall positive correlation between this two factors. In the future, we hope to derive an automatic keyword extraction mechanism and apply the same experiment to other companies and other industries.
+The rapid populization of social networks makes it possible to understand how consumers evaluate a company and their products directly. In this project we evaluate whether the insights collected from Twitter help us understand how stock prices might variate. We conducted sentment analysis on Tweets collected by querying Twitter API with predefined keywords that associated with companies we are interested. Ngram models extracted from Tweets collected by querying with emoticons along with part-of-speech tags, metadata such as sentence length are used as features for a two-phase objectivity and polarity classification. Random Forest was used for classification and accuracies that comparable to previous works are achieved. We then verify whether the result of sentment analysis correlated with stock prices by calculating Pearson correlation coefficients. We found overall positive correlation between this two factors. In the future, we hope to derive an automatic keyword extraction mechanism and apply the same experiment to other companies or other industries.
 \end{abstract}
 
 \section{Introduction}
@@ -27,26 +27,26 @@ Consequently, we propose to verify that the performance of a company can be pred
 
 To verify our assumption, we will start with a few companies that are widely discussed over the web. Besides, ideally, its revenue should primarily depend on a few key products, which means we can use a few keywords to collect the data we need. For instance, \#iphone4s, \#iphone4, \#iphone3, \#ipad, \#macbookair, etc. Apple Incorporation, for instance, is one of the companies we will start with, since it meets the condition we discussed above. It is widely discussed on social network. If one query 'Apple' or 'iPhone' on Twitter, most of the tweets are published within several minutes, indicates the frequency of tweets mentioning it is fairly high. In contrast, if one query 'Baidu' on Twitter, there are tweets older than one hour even in the first page.
 
-For the social network platform we will use, we favor Twitter as our major data source for the following reasons. First, the amount of data is huge enough for our usage. Second, its microblogging nature provide sentence level texts that focus on usually a single idea (I love \#iPhone4S coz I had a lot of fun playing with \#Siri), thus reducing the noise we have to deal with.
+For the social network platform we will use, we favor Twitter as our major data source for the following reasons. First, the amount of data is huge enough for our usage. Second, its microblogging nature provide sentence level texts that focus on usually a single idea (e.g., I love \#iPhone4S coz I had a lot of fun playing with \#Siri), thus reducing the noise we have to deal with.
 
-After collecting the data, we will classify the tweets into positive, neutral (or irrelevant), negative as the measurements of consumer evaluation. After that, we will study the relationship between this evaluation and the stock price of corresponding companies using statistical techniques.
+After collecting the data, we will classify the tweets into positive, neutral (or irrelevant), negative as the measurements of consumer evaluation. After that, we will study the relationship between this evaluation and the stock price of corresponding companies using statistical techniques such as Pearson Correlation Coefficients.
 
 \section{Related Works}
 For its wide and valuable usage, sentiment analysis, which is to classify the polarity (positive, negative) given a document or a sentence, has been widely studied yet still an extremely challenging problem. Pang and Lee \cite{Pang:08} did a comprehensive survey about the state-of-the-art techniques in the sentimental area. Liu \cite{Liu:10} summarizes the theory and techniques of the subfield for the purpose of teaching and learning.
 
 Turney \etal~\cite{Turney:02} pioneered in the field by firstly address the problem. He first extract phrases that might contain subjective evaluation using its POS tags, then apply PMI-IR algorithm \cite{Turney:01} to determine the semantic orientation by measuring the similarity of the extracted phrases and "excellent", "poor" (regarded as positive and negative, respectively, in this paper). Finally, the polarity of a document is given by averaging the semantic orientations of all the extracted phrases.
 
-In contrast, rather than using predefined bags of words for polarity, Pang \etal~\cite{Pang:02} approach the problem using features that are prior-knowledge-free. They use unigrams and bigrams extracted from corpus according to the frequencies then apply the standard machine learning classifiers, which including Naive Bayes, Maximum Entropy and Support Vector Machines (SVM). They concludes that using the presence of unigrams and using SVM as classifier yields the best accuracy (82.9\%).
+In contrast, rather than using predefined bags of words for polarity, Pang \etal~\cite{Pang:02} approach the problem by using features that are prior-knowledge-free. They use unigrams and bigrams extracted from corpus according to the frequencies then apply the standard machine learning classifiers, which includes Naive Bayes, Maximum Entropy and Support Vector Machines (SVM). They concludes that using the presence of unigrams and using SVM as classifier yields the best accuracy (82.9\%).
 
-Besides polarity, detection of opinion strength is also made posible by further research. Thelwall \etal~\cite{Thelwall:10} proposed to use a dictionary of sentiment words with associated strength measures as one of its feature to detect the opinion strength. Repeated letters, punctuation, emoticons are also used to make the system suitable for informal text.
+Besides polarity, detection of opinion strength is also made possible by further research. Thelwall \etal~\cite{Thelwall:10} proposed to use a dictionary of sentiment words with associated strength measures as one of its feature to detect the opinion strength. Repeated letters, punctuation, emoticons are also used to make the system suitable for informal text.
 
-Since the popularity of social networks, especially the microblogging has grown quickly in the recent years, there are several systems utilize these platforms as the corpus of sentiment analysis. Go \etal~\cite{Go:09} first experiment sentiment analysis on Twitter, the most popular microblogging platform. They basically follow the algorithm used as Pang \etal~\cite{Pang:02}. Unigram, Bigram, POS tags are used as features; Bayes, SVM, Maximum Entropy are used as classifier. They report that the combination of unigram and Bayes with mutual information feature selection method yields the best result, which is slightly different from Pang \etal~\cite{Pang:02}
+Since the popularity of social networks, especially the microblogging has grown quickly in the recent years, there are several systems utilize these platforms as the corpus of sentiment analysis. Go \etal~\cite{Go:09} first experiment sentiment analysis on Twitter, the most popular microblogging platform. They basically follow the algorithm used as Pang \etal~\cite{Pang:02}. Unigrams, bigrams, POS tags are used as features; Bayes, SVM, Maximum Entropy are used as classifiers. They report that the combination of unigram and Bayes with mutual information feature selection method yields the best result, which is slightly different from Pang \etal~\cite{Pang:02}.
 
-Pak and Paroubek \cite{Pak:10} conduct a two-phase classification to improve the accuracy. Tweets are first divide to objective and subjective, then subjective tweets are further divide to positive and negative. For training data, they use pre-defined emoticons to get the subjective data, while retrieve tweets from popular newspaper accounts as objective data. In terms of features and classifiers, they follow a similar setup as Pang \etal~\cite{Pang:02} but also includes trigrams as one of the feature. They conclude that bigram yields the best result since it maintains a good balance between coverage and also able to catch sentiment expressions such as negation.
+Pak and Paroubek \cite{Pak:10} conduct a two-phase classification to improve the accuracy. Tweets are first divide to objective and subjective ones, then subjective tweets are further divide to positive and negative ones. For training data, they use pre-defined emoticons to get the subjective data, while retrieve tweets from popular newspaper accounts as objective data. In terms of features and classifiers, they follow a similar setup as Pang \etal~\cite{Pang:02} but also includes trigrams as one of the features. They conclude that bigram yields the best result since it maintains a good balance between coverage and also able to catch sentiment expressions such as negation.
 
-Barbosa and Feng \cite{Barbosa:10} propose propose new features to increase the accuracy of Twitter sentiment analysis. They propose the use of two additional sets of features. One of the sets is the meta features. In addition to POS tags, a word list with pre-defined polarity and subjectivity is used. Note that if the word is preceded by negative expression (e.g., not, never), the polarity will be reversed. The other set they propose is the use of tweets syntax feature, such as retweet, hashtags, reply, link.
+Barbosa and Feng \cite{Barbosa:10} propose new features to increase the accuracy of Twitter sentiment analysis. They investigate the use of two additional sets of features. One of the sets is the meta features. In addition to POS tags, a word list with pre-defined polarity and subjectivity is used. Note that if the word is preceded by negative expression (e.g., not, never), the polarity will be reversed. The other set they propose is the use of tweets syntax feature, such as retweet, hashtags, reply, link.
 
-Agarwal \etal~\cite{Agarwal:11} claimed they have ahiceved a better result by incorporating the tree kernel model, which is a tree of features such as stop words, target, URL, English words. They compared the tree kernel based model with unigram model and feature-based model from previous work and conclude that the tree kernel model outperforms the other two. Besides, they claimed that using random sampled streaming tweets instead of that searched by keywords introduces fewer biases.
+Agarwal \etal~\cite{Agarwal:11} claimed that they have achieved a better result by incorporating the tree kernel model, which is a tree of features such as stop words, target, URL, English words. They compared the tree kernel based model with unigram model and feature-based model from previous work and conclude that the tree kernel model outperforms the other two. Besides, they claimed that using random sampled streaming tweets instead of that searched by keywords introduces fewer biases.
 
 There are different applications on data mining of Twitter or other social networks. Petrovic \etal~\cite{Petrovic:10} proposed a system to detect new event on Twitter, on which news propagate even quicker than the traditional news medias.
 
@@ -54,7 +54,7 @@ There are also applications for sentiment analysis, although not necessarily usi
 
 Blair-Goldensohn \etal~\cite{Blair:08} propose to incorporate the readily available information other than text itself to produce a better result. They have also integrated a summary of customer review, which includes different aspects (e.g., food, decor, service, etc in a restaurant) and the corresponding reasons customers love or hates a specific store or product.
 
-Among all the applications, we are most interested about applications that utilize sentiment analysis or opnion mining to predict some metrics in the physical world. Asur and Huberman \cite{Asur:10} used Twitter data to predict the box-office revenues for movies. They study 24 movies released between November 2009 and February 2010 and conclude that the average tweet-rates (published tweets per hour) is statiscally correalated with its box-office revenue. They also report that sentiment content can improve the correalation although not significant as tweet-rates themselves.
+Among all the applications, we are most interested about applications that utilize sentiment analysis or opnion mining to predict some metrics in the real world. Asur and Huberman \cite{Asur:10} used Twitter data to predict the box-office revenues for movies. They study 24 movies released between November 2009 and February 2010 and conclude that the average tweet-rates (published tweets per hour) is statiscally correalated with its box-office revenue. They also report that sentiment content can improve the correalation although not significant as tweet-rates themselves.
 
 There are also financial applications using sentiment analysis for predicting stock prices. Schumaker \etal~\cite{Schumaker:2009} propose a system, AZFinText, which can predict the stock price of a company that mentioned by a financial news. They asuume financial news will have impact on the decision made within stock buyers, and it will have immediate effect so that the price after 20 minutes the news is released can be predicted. They implemented the SVR Sequential Minimal Optimization function through WEKA \cite{Witten:2005}, while using proper nouns and results of sentiment analysis as features. They conclude that both subjectivety and polarity contribute to the accuracy of stock prices prediction.
 
@@ -203,37 +203,37 @@ We have also tried to verify Zipf's law on the test data. The ranks and freqenci
         \hline
         \textbf{Company} &  \textbf{Keyword} & \textbf{\# of Tweets} \\ \hline
         \hline
-        Apple &  \#apple & 6967 \\ \hline
-        Apple &  \#iphone & 7452 \\ \hline
-        Apple &  \#iphone4s & 7476 \\ \hline
-        Apple &  \#iphone4 & 7485 \\ \hline
-        Apple &  \#siri & 7457 \\ \hline
-        Apple &  \#ipod & 7497 \\ \hline
-        Apple &  \#mac & 7481 \\ \hline
-        Apple &  \#macintosh & 647 \\ \hline
-        Apple &  \#itunes & 7470 \\ \hline
-        Apple &  \#ios & 7470 \\ \hline
-        Google &  \#google & 7290 \\ \hline
-        Google &  \#android & 7484 \\ \hline
-        Google &  \#droid & 7446 \\ \hline
-        Google &  \#googleplus & 7441 \\ \hline
-        Google &  \#gplus & 742 \\ \hline
-        Google &  \#gmail & 4772 \\ \hline
-        Google &  \#youtube & 7444 \\ \hline
-        Google &  \#chrome & 7447 \\ \hline
-        Google &  \#googlemap & 143 \\ \hline
-        Google &  \#gmap & 20 \\ \hline
-        Microsoft &  \#windows & 7474 \\ \hline
-        Microsoft &  \#windows8 & 7463 \\ \hline
-        Microsoft &  \#xbox & 7492 \\ \hline
-        Microsoft &  \#xbox360 & 7451 \\ \hline
-        Microsoft &  \#kinect & 7480 \\ \hline
-        Microsoft &  \#msn & 6752 \\ \hline
-        Microsoft &  \#bing & 7057 \\ \hline
-        Microsoft &  \#ie & 3577 \\ \hline
-        Amazon &  \#amazon & 7442 \\ \hline
-        Amazon &  \#kindle & 7424 \\ \hline
-        Amazon &  \#kindlefire & 7389 \\ \hline
+        Apple &  \#apple & 9957 \\ \hline
+        Apple &  \#iphone & 10435 \\ \hline
+        Apple &  \#iphone4s & 10461 \\ \hline
+        Apple &  \#iphone4 & 10475 \\ \hline
+        Apple &  \#siri & 10438 \\ \hline
+        Apple &  \#ipod & 10487 \\ \hline
+        Apple &  \#mac & 10473 \\ \hline
+        Apple &  \#macintosh & 806 \\ \hline
+        Apple &  \#itunes & 10449 \\ \hline
+        Apple &  \#ios & 10466 \\ \hline
+        Google &  \#google & 10148 \\ \hline
+        Google &  \#android & 10471 \\ \hline
+        Google &  \#droid & 10400 \\ \hline
+        Google &  \#googleplus & 10426 \\ \hline
+        Google &  \#gplus & 911 \\ \hline
+        Google &  \#gmail & 6777 \\ \hline
+        Google &  \#youtube & 10409 \\ \hline
+        Google &  \#chrome & 10437 \\ \hline
+        Google &  \#googlemap & 232 \\ \hline
+        Google &  \#gmap & 31 \\ \hline
+        Microsoft &  \#windows & 10470 \\ \hline
+        Microsoft &  \#windows8 & 10459 \\ \hline
+        Microsoft &  \#xbox & 10431 \\ \hline
+        Microsoft &  \#xbox360 & 10434 \\ \hline
+        Microsoft &  \#kinect & 10468 \\ \hline
+        Microsoft &  \#msn & 9074 \\ \hline
+        Microsoft &  \#bing & 9126 \\ \hline
+        Microsoft &  \#ie & 5118 \\ \hline
+        Amazon &  \#amazon & 10405 \\ \hline
+        Amazon &  \#kindle & 10402 \\ \hline
+        Amazon &  \#kindlefire & 10144 \\ \hline
         \hline
     \end{tabular}
 \caption{Number of tweets for each keywords used in test data}
@@ -247,20 +247,20 @@ We have also tried to verify Zipf's law on the test data. The ranks and freqenci
         \hline
         \textbf{Company} &  \textbf{Keyword} & \textbf{\# of Tweets} \\ \hline
         \hline
-        Research in Motion &  \#rim & 5989 \\ \hline
-        Research in Motion &  \#blackberry & 7487 \\ \hline
-        Dell &  \#dell & 7460 \\ \hline
-        Intel &  \#intel & 7452 \\ \hline
-        Intel &  \#xeon & 734 \\ \hline
-        Yahoo &  \#yahoo & 7429 \\ \hline
-        Yahoo &  \#yahoomail & 220 \\ \hline
-        Yahoo &  \#ymail & 152 \\ \hline
-        Yahoo &  \#yim & 41 \\ \hline
-        Nvidia &  \#nvidia & 1643 \\ \hline
-        Nvidia &  \#tegra & 688 \\ \hline
-        Nvidia &  \#tegra3 & 284 \\ \hline
-        Nvidia &  \#geforce & 198 \\ \hline
-        Netflix &  \#netflix & 7463 \\ \hline
+        Research in Motion &  \#rim & 8673 \\ \hline
+        Research in Motion &  \#blackberry & 10482 \\ \hline
+        Dell &  \#dell & 10429 \\ \hline
+        Intel &  \#intel & 9846 \\ \hline
+        Intel &  \#xeon & 788 \\ \hline
+        Yahoo &  \#yahoo & 10399 \\ \hline
+        Yahoo &  \#yahoomail & 384 \\ \hline
+        Yahoo &  \#ymail & 176 \\ \hline
+        Yahoo &  \#yim & 53 \\ \hline
+        Nvidia &  \#nvidia & 2338 \\ \hline
+        Nvidia &  \#tegra & 977 \\ \hline
+        Nvidia &  \#tegra3 & 347 \\ \hline
+        Nvidia &  \#geforce & 324 \\ \hline
+        Netflix &  \#netflix & 10452 \\ \hline
         \hline
     \end{tabular}
 \caption{Number of tweets for each keywords used in test data (Con't)}
@@ -297,23 +297,23 @@ Since the Random Forest achieves the best accuracy, we use it to classify the ob
         \hline
         \textbf{Company} &  \textbf{Obj Twts} & \textbf{Subj Twts} & \textbf{Obj Ratio} & \textbf{Subj Ratio} \\ \hline
         \hline
-        Apple &  60507 & 6895 & 0.897703332245 & 0.102296667755 \\ \hline
-        Google &  44504 & 5725 & 0.886022019152 & 0.113977980848 \\ \hline
-        Microsoft &  48505 & 6241 & 0.886000803712 & 0.113999196288 \\ \hline
-        Amazon &  18649 & 3606 & 0.837968995731 & 0.162031004269 \\ \hline
-        Research in Motion  &  11920 & 1556 & 0.884535470466 & 0.115464529534 \\ \hline
-        Dell &  6759 & 701 & 0.906032171582 & 0.0939678284182 \\ \hline
-        Intel &  7642 & 544 & 0.933545076961 & 0.0664549230393 \\ \hline
-        Yahoo &  6573 & 1269 & 0.83817903596 & 0.16182096404 \\ \hline
-        Nvidia &  2620 & 193 & 0.931389975116 & 0.0686100248845 \\ \hline
-        Netflix &  6606 & 857 & 0.885166822993 & 0.114833177007 \\ \hline
+        Apple &  63479 & 30968 & 0.672112401664 & 0.327887598336 \\ \hline
+        Google &  50798 & 19444 & 0.723185558498 & 0.276814441502 \\ \hline
+        Microsoft &  58170 & 17410 & 0.769648055041 & 0.230351944959 \\ \hline
+        Amazon &  24379 & 6572 & 0.787664372718 & 0.212335627282 \\ \hline
+        Research in Motion &  13195 & 5960 & 0.688854085095 & 0.311145914905 \\ \hline
+        Dell &  8344 & 2085 & 0.800076709176 & 0.199923290824 \\ \hline
+        Intel &  8884 & 1750 & 0.83543351514 & 0.16456648486 \\ \hline
+        Yahoo &  8705 & 2307 & 0.79050127134 & 0.20949872866 \\ \hline
+        Nvidia &  3274 & 712 & 0.821374811841 & 0.178625188159 \\ \hline
+        Netflix &  5923 & 4529 & 0.56668580176 & 0.43331419824 \\ \hline
     \end{tabular}
 \caption{Objectivity classification results by company}
 \label{objectivity-by-company}
 \end{center}
 \end{table}
 
-As one can see, almost all of the ratios of objectivity are around $90\%$, which is a fairly high ratio. It can also be justified by our intuition that most of people tweets for sharing information, while small portion of them are expressing their own opinion.
+As one can see, almost all of the ratios of objectivity are above $70\%$, which is a fairly high ratio. It can also be justified by our intuition that most of people tweets for sharing information, while small portion of them are expressing their own opinion.
 
 \subsection{Polarity Classification}
 Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since the Random Forest achieves the highest accuracy, we will then apply the classifier to predict the polarity of test data.
@@ -346,16 +346,16 @@ Then, the model is used to classify tweets in testing sets. The result of polari
         \hline
         \textbf{Company} &  \textbf{Pos Tweets} & \textbf{Neg Tweets} & \textbf{Pos Ratio} & \textbf{Neg Ratio} \\ \hline
         \hline
-        Apple &  4953 & 1942 & 0.718346627991 & 0.281653372009 \\ \hline
-        Google &  4470 & 1255 & 0.780786026201 & 0.219213973799 \\ \hline
-        Microsoft &  4764 & 1477 & 0.76333920846 & 0.23666079154 \\ \hline
-        Amazon &  2310 & 1296 & 0.640599001664 & 0.359400998336 \\ \hline
-        Research in Motion &  1050 & 506 & 0.674807197943 & 0.325192802057 \\ \hline
-        Dell &  529 & 172 & 0.754636233951 & 0.245363766049 \\ \hline
-        Intel &  473 & 71 & 0.869485294118 & 0.130514705882 \\ \hline
-        Yahoo &  1035 & 234 & 0.815602836879 & 0.184397163121 \\ \hline
-        Nvidia &  144 & 49 & 0.746113989637 & 0.253886010363 \\ \hline
-        Netflix &  643 & 214 & 0.750291715286 & 0.249708284714 \\ \hline
+        Apple &  29286 & 1682 & 0.945685869284 & 0.0543141307156 \\ \hline
+        Google &  16892 & 2552 & 0.868751285744 & 0.131248714256 \\ \hline
+        Microsoft &  15851 & 1559 & 0.910453762206 & 0.0895462377944 \\ \hline
+        Amazon &  5887 & 685 & 0.895769933049 & 0.104230066951 \\ \hline
+        Rim &  5609 & 351 & 0.94110738255 & 0.0588926174497 \\ \hline
+        Dell &  1839 & 246 & 0.882014388489 & 0.117985611511 \\ \hline
+        Intel &  1627 & 123 & 0.929714285714 & 0.0702857142857 \\ \hline
+        Yahoo &  2036 & 271 & 0.882531426094 & 0.117468573906 \\ \hline
+        Nvidia &  621 & 91 & 0.872191011236 & 0.127808988764 \\ \hline
+        Netflix &  4217 & 312 & 0.931110620446 & 0.068889379554 \\ \hline
     \end{tabular}
 \caption{Polarity classification results by company}
 \label{polarity-by-company}
@@ -439,7 +439,7 @@ We have also tested under different size of unigram features for four classifier
 We also note that the optimal feature size of bigrams can also be examined in similar setup. We will leave this as one of the future works.
 
 \subsection{Statistical Inference}
-We collected the corresponding stock prices from the Yahoo! Finance. Figure \ref{xyplots-ratio-price} and Figure \ref{xyplots-ratio-price-02} give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week five.
+We collected the corresponding stock prices from the Yahoo! Finance. Figure \ref{xyplots-ratio-price} and Figure \ref{xyplots-ratio-price-02} give the reader an overview of the relationship between ratio of sentiment analysis and its stock prices, until week seven. The red lines indicate the linear regression model generated by $R$. We also summarized the standard residue errors in Table \ref{residue-errors}. Note that companies that have a higher stock prices will tend to have a higher standard residue error.
 
 \begin{figure}
 \centering
@@ -463,6 +463,28 @@ We collected the corresponding stock prices from the Yahoo! Finance. Figure \ref
 \label{xyplots-ratio-price-02}
 \end{figure}
 
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | c || c | }
+        \hline
+        \textbf{Company} & \textbf{Standard Residue Error} \\ \hline
+        \hline
+        Amazon & 7.838 \\ \hline
+        Apple & 34.18 \\ \hline
+        Dell & 0.6238 \\ \hline
+        Google & 13.8 \\ \hline
+        Intel & 0.5802 \\ \hline
+        Microsoft & 0.329 \\ \hline
+        Netflix & 5.311 \\ \hline
+        Nvidia & 0.5766 \\ \hline
+        Research in Motion & 0.5948 \\ \hline
+        Yahoo & 0.2969 \\ \hline
+    \end{tabular}
+\caption{Standard residue errors}
+\label{residue-errors}
+\end{center}
+\end{table}
+
 If we run Pearson Coeficient tests on this two vectors, the results can be summarized as Table \ref{coefficients-by-company}.
 
 \begin{table}
@@ -471,16 +493,16 @@ If we run Pearson Coeficient tests on this two vectors, the results can be summa
         \hline
         \textbf{Company} & \textbf{Pearson Correlation Coefficient} & \textbf{2-tailed p-value} \\ \hline
         \hline
-        Apple & 0.422085515551 & 0.345530746633 \\ \hline
-        Google & -0.461215178329 & 0.297565573938 \\ \hline
-        Microsoft & -0.282906187474 & 0.538710230253 \\ \hline
-        Amazon & 0.508696941954 & 0.243663965828 \\ \hline
-        Research in Motion & -0.141420081688 & 0.76231137191 \\ \hline
-        Dell & -0.570014225326 & 0.181531408493 \\ \hline
-        Intel & -0.0870216413743 & 0.852826209232 \\ \hline
-        Yahoo & 0.464940791366 & 0.293161912391 \\ \hline
-        Nvidia & 0.31196744398 & 0.495778812145 \\ \hline
-        Netflix & -0.00602606307296 & 0.98977002334 \\ \hline
+        Apple & 0.569057264858 & 0.182433613581 \\ \hline
+        Google & -0.533343926118 & 0.217646661565 \\ \hline
+        Microsoft & -0.753330831187 & 0.0505590882597 \\ \hline
+        Amazon & 0.573260924741 & 0.178486767023 \\ \hline
+        Research in Motion & 0.405919970286 & 0.366229509373 \\ \hline
+        Dell & -0.0821672150498 & 0.86097901078 \\ \hline
+        Intel & 0.0532109395964 & 0.909794134591 \\ \hline
+        Yahoo & 0.205612368285 & 0.658273047868 \\ \hline
+        Nvidia & 0.246641522789 & 0.59390682236 \\ \hline
+        Netflix & -0.148248289524 & 0.751082336844 \\ \hline
     \end{tabular}
 \caption{Pearson Coefficients analysis by company}
 \label{coefficients-by-company}
@@ -495,7 +517,7 @@ In addition, the Tweets we collected for study are also a sampling toward produc
 
 Finally, we envision that there are quite a few rooms for the improvement for the accuracy of sentiment analysis. The accuracy in our study is around $70\%$ to $80\%$, which is still far from perfect.
 
-However, we also want to note that the average of Pearson Coefficients from the study is $0.164$, which means there is an overall slight positive correalation. If one incorporates our result to systems such as an automatic trading robot, the system may still benifited from the analysis we conducted here. In addition, we also believe that the positve correalation may be improved as we find more sophiscated mechanisms to handle the limitations mentioned above.
+However, we also want to note that the average of Pearson Coefficients from the study is $0.0537$, which means there is an overall slight positive correalation. If one incorporates our result to systems such as an automatic trading robot, the system may still benifited from the analysis we conducted here. In addition, we also believe that the positve correalation may be improved as we find more sophiscated mechanisms to handle the limitations mentioned above.
 
 \section{Limitations}
 We list some limitations here. We assume that we can get positive tweets by querying ':)' or negative tweets by ':('. However, the semantic meaning in tweets can be complicated. Such as the following tweet by user @franki\_kuka: 'only the mail..? ;)) \#FF RT @asphodelia: \#Yahoo! Mail appears to be down...'. In this tweet, the user is probably being ironic. However, this will not be detected by our current system.

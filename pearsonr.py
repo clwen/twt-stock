@@ -16,7 +16,7 @@ def extract_prices(company):
     prices = []
     price_file = 'stock-prices/' + company + '.csv'
     lines = open(price_file, 'r').readlines()
-    lines = lines[1:1+week_num] # ignore first line, which is header
+    lines = lines[2:2+week_num] # ignore first line, which is header
     for line in lines:
         tokens = line.split(',')
         prices.append(float(tokens[4]))

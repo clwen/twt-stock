@@ -13,7 +13,7 @@ companies = odict(
         ('nvidia', ['nvidia', 'tegra', 'tegra3', 'geforce']),
         ('netflix', ['netflix'])
         ])
-weeks = ['w1', 'w2', 'w3', 'w4', 'w5']
+weeks = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7']
 
 def count_tweets(filename):
     tweets_count = 0
