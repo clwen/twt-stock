@@ -70,18 +70,18 @@ We detail each module by a subsection in the following of this section. In subse
 Our data can be divided into the following portions: test data, which contain tweets about products or companies we are interested; training data, which can be further divide to positive training data, negative training data, and objective training data. We first discuss the methodolgy how the data were collected, then we define our test data and training data subsequently.
 
 \subsubsection{Methodology}
-For the reasons stated before, we will mainly use Twitter as our primary corpus. Ideally, we would like to collect tweets back to one or two years to catch the trends that whenever a popular comes to the market, the stock prices soars (such as iPhone4), or reversely, whenever a product comes to the market but not fully satisfied consumer's expection, the stock price plump (such as iPhone4S). 
+For the reasons stated before, we mainly used Twitter as our primary corpus. Ideally, we would like to collect Tweets back to one or two years to catch the trends that whenever a popular came to the market, the stock prices soared (such as iPhone4), or reversely, whenever a product came to the market but not fully satisfied consumer's expection, the stock price plumped (such as iPhone4S). 
 
-However, Since Twitter API only allow external users to parse the tweets no longer than a week from the time the data is requested, we will collect the tweets every week from week of Feburuary 13th to the end of this project. We write a script that will automatically fetch the tweets defined by our keywords detailed below in the same time of the week (Saturday morning in our case) to minimize the bias possibly introduced by collecting tweets at different time of a week. For instance, people might feel blue at Monday while happier at Friday night. We also note that it is impractical to get data older than one week by crawl the data directly from Twitter website instead of using the API since the tweets displayed on the website are also not older than one week by our observation, which might due to the technical convinence of Twitter.
+However, since Twitter API only allows external users to parse the Tweets no longer than a week from the time the data is requested, we collected the Tweets every week from week of Feburuary 13th to the end of this project, which was seven weeks to the time this report was written. We wrote a script that automatically fetches the Tweets defined by our keywords detailed below in the same time of the week (Saturday morning in our case) to minimize the bias possibly introduced by collecting tweets at different time of a week. For instance, people might feel bluer at Monday mornings while happier at Friday nights. We also note that it is impractical to get data older than one week by crawling the data directly from the Twitter website instead of using the API since the Tweets displayed on the website are also not older than one week according to our observation, which might due to the technical convinence of Twitter.
 
-The format of data fetched from Twitter API is JSON. We use simplejson of Python to parse the data and extract the text part and time stamp of each tweet.
+The format of data fetched from Twitter API was JSON. We used simplejson of Python to parse the data and extracted the text part and time stamp of each tweet.
 
 \subsubsection{Test Data}
-We fetch our test data by querying Twitter API with predefined query tems, which are products or keywords we are interested in. For each companies covered in this study, several keywords are associated as the method we will described later. We includes top tech companies that has sufficient historical stock prices data at NASDAQ. We prefer the consumer-facing companies such as Apple for we can expect there are more discussions on the Internet and hence more meaningful information can be extract. In contrast, we will not include companies that are not mainly targeted at normal consumer, such as IBM. We also note that companies that haven't IPO or just IPO are not included, such as Twitter itself or Facebook.
+We fetched our test data by querying Twitter API with predefined query tems, which are products or keywords we are interested in. For each companies covered in this study, several keywords were associated as the method we described later. We included top tech companies that has sufficient historical stock prices data at NASDAQ. We prefer the consumer-facing companies such as Apple for we can expect there are more discussions on the Internet and hence more meaningful information can be extract. Besides, the stock prices of this kind of companies are also more likey to be influenced by consumer evaluation. In contrast, we will not include companies that are not mainly targeted at normal consumer, such as IBM. We also note that companies that haven't IPO or just IPO are not included, such as Twitter itself or Facebook.
 
-For keywords, we interested in the major products of the company (such as Windows for Microsoft) or new product that are widely discussed in Twitter (such as iPhone4S for Apple). We exclude some keywords that will introduce ambiguity (such as Microsoft Office with an literarily office). We do it by querying the company at Twitter web interface, and observe the keywords that are frequenly appear with the company. For companies that don't have apprent keyword (such as Amazon) to use, we just list the company name as its keyword. In addition, to have a broad coverage and get adapt to the casual nature of Twitter, we also listed some common abbreviations for products (such as 'gmap' stands for 'googlemap'). Note that a company might be highly correalated with keywords from other companies, such as 'Amazon' and 'iTunes'. We count only the keyword directly related to the current company.
+For keywords, we interested in the major products of the company (such as Windows for Microsoft) or new product that are widely discussed in Twitter (such as iPhone4S for Apple). We excluded some keywords that might introduce ambiguity (such as '\#office' for Microsoft Office that might be confused with an office in its literary meaning). We do it by querying the company at Twitter web interface, and observe the keywords that are frequenly appear with the company. For companies that don't have apprent keyword (such as Amazon) to use, we simply listed the company name as its keyword. In addition, in order to have a broader coverage and get adapt to the casual nature of Twitter, we also listed some common abbreviations for products (such as 'gmap' stands for 'googlemap'). Note that a company might be highly correalated with keywords from other companies, such as 'Amazon' and 'iTunes'. We counted only the keywords directly related to the current company.
 
-Table \ref{companies-listing} lists the tech companies we would like to study, along with their key products and hash tags that we will use for searching in the Twitter. 
+Table \ref{companies-listing} lists the tech companies we studied in the project, along with their key products and hash tags that we used for searching in the Twitter. 
 
 \begin{table}
 \begin{center}
@@ -105,23 +105,21 @@ Table \ref{companies-listing} lists the tech companies we would like to study, a
 \end{table}
 
 \subsubsection{Training Data}
-To train the positive, negative, we fetch tweets with positve emoticons such as ':)' and negative emoticons such as ':(', respectively. Note that we didn't use other query term to minimize the bias possibly introduced by query term. 
+To train the positive, negative, we fetched Tweets with postive emoticons such as ':)' and negative emoticons such as ':(', respectively. Note that we didn't use other query terms so that we can minimize the bias possibly introduced by query term. 
 
-For objective tweets, we fetch tweets from technology news account since our major interest is tweets about technology. We list the technology news account we used here: @TechCrunch, @CNETNews, @engadget, @slashdot, @RWW, @mashable, @Gizmodo, @gigaom, @allthingsd, @TheNextWeb, @verge, @Wired, @nytimesbits, @WSJTech, @SAI, @guardiantech, @HuffPostTech.
-
-Additionally, we will also use the JDPA \cite{JDPA}, which is an annually annotated blog entries about automobiles and cameras, to train our ngram model.
+For objective tweets, we fetched tweets from technology news account since our current interest is in Tweets about technology. We list the technology news accounts we used here: @TechCrunch, @CNETNews, @engadget, @slashdot, @RWW, @mashable, @Gizmodo, @gigaom, @allthingsd, @TheNextWeb, @verge, @Wired, @nytimesbits, @WSJTech, @SAI, @guardiantech, @HuffPostTech.
 
 \subsection{Preprocessing}\label{preprocessing}
-For data normalization, we asuume URLs and Twitter-specific features might good features while classifying tweets, we replace all urls to 'URL', hashtag to 'HASHTAG' and reply to 'REPLY'. Afterwards we do tokenization so that each token, including punctuations are splitted by space. Finally, we conduct part-of-speech tagging using NLPlib \cite{NLPlib} by Mark Watson and Jason Wiener.
+For data normalization, we assumed that URLs and Twitter-specific features might be good features while classifying tweets, we replaced all urls to 'URL', hashtags to 'HASHTAG' and replies to 'REPLY'. Afterwards we conducted tokenization so that each token, including punctuations are splitted by spaces. Finally, we conducted part-of-speech tagging using NLPlib \cite{NLPlib} by Mark Watson and Jason Wiener.
 
 \subsection{Feature Extraction}\label{feature-extraction}
-Our features can be divided into four categories: count of part-of-speech tags, meta-information, count of twitter-specific syntax, unigram model trained by our training data. For count of part-of-speech tags, we will count all the possible tags produced by NLPlib, although we suppose adjective or adverbs might carry more subjective information. We might remove some of relative useless features after initial analysis.
+Our features can be divided into four categories: count of part-of-speech tags, meta-information, count of Twitter-specific syntax, ngram model trained by our training data. For count of part-of-speech tags, we counted all the possible tags produced by NLPlib, although we suppose adjective or adverbs might carry more subjective information.
 
-Meta-information includes average length of sentences, average length of tokens, number of sentences, etc., which forms our second category of features. Count of first/second/third person pronouns, punctuations will also be extracted.
+Meta-information includes average length of sentences, average length of tokens, number of sentences, etc., formed our second category of features. Count of first/second/third person pronouns, punctuations were also be extracted.
 
-We also count Twitter-specific features, which includes hashtags, replies. We listed features in previous three categories in Table \ref{feature-listing}.
+We also counted the Twitter-specific features, which includes hashtags, replies. We listed features in previous three categories in Table \ref{feature-listing}.
 
-Finally, we extract most used unigram in our positve and negative training data, respectively. Since Pang \etal~\cite{Pang:02} reported that examing only the presence rather than counting the frequency of unigram yields better result. We will experiment whether presence of frequency produce better accuracy. In addition, we will also examine the best range of number of features we should use from the trained model.
+Finally, we extracted most used unigram in our positve and negative training data, respectively. In addition, we will also examine the best range of number of features we should use from the trained model.
 
 \begin{table}
 \begin{center}
@@ -130,7 +128,7 @@ Finally, we extract most used unigram in our positve and negative training data,
         Part-of-speech tags &  \vbox{\hbox{\strut count of: CC, DD, DT, EX, FW, IN,}\hbox{\strut JJ, JJR, JJS, LS, MD,}\hbox{\strut NN, NNS, NNP, NNPS,}\hbox{\strut PDT, POS, PRP, PRP\$,}\hbox{\strut RB, RBR, RBS, RP, SYM, TO, UH,}\hbox{\strut VB, VBD, VBG, VBN, VBP, VBZ,}\hbox{\strut WDT, WP, WP\$, WRB}} \\ \hline
            Meta-information & \vbox{\hbox{\strut count of: first/second/thrid person pronouns}\hbox{\strut count of commas, colons and semi-colons}\hbox{\strut count of: dashes, parenthses, ellipses}\hbox{\strut count of: wh-words, slang acronyms, words all in upper case}\hbox{\strut average length of sentences (in tokens)}\hbox{\strut average length of tokens (exclude punctuations tokens)}\hbox{\strut number of sentences}} \\ \hline
         Twitter-specific syntax & count of reply, hashtags \\ \hline
-        Ngram models & unigram trained from training data (frequency or presence) \\ \hline
+        Ngram models & unigram trained from training data (in frequency) \\ \hline
     \end{tabular}
 \caption{Features used in classification}
 \label{feature-listing}
@@ -138,12 +136,12 @@ Finally, we extract most used unigram in our positve and negative training data,
 \end{table}
 
 \subsection{Classification}\label{classification}
-For classification, we will use Naive Bayes, Support Vector Machine (SVM) and Maimum Entropy through machine learning package WEKA \cite{Witten:2005}. We will evaluate the accuracy by conducting cross-validation on training data. We will then apply the classifier to our test data. As Pang \etal~\cite{Pang:02} and Go \etal~\cite{Go:09} reported, an accuracy around 80\% for polarity classifier can be expected.
+For classification, we used Naive Bayes, Support Vector Machine (SVM), Decision Tree, and Random Forest through machine learning package WEKA \cite{Witten:2005}. We evaluated the accuracy by conducting cross-validation on training data. We then applied the classifier to our test data. As Pang \etal~\cite{Pang:02} and Go \etal~\cite{Go:09} reported, an accuracy around 80\% for polarity classifier can be expected.
 
-We will first classify the tweets into subjective and objective. For subjective tweets, we further classify it to positve or negative. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $b_i$, where $p_i + n_i + b_i = 1$.
+We first classified the tweets into subjective and objective ones. For subjective tweets, we further classified it to positve or negative ones. Hence, in the end of classification stage, for each company $c_i$, we will have positive ratio $p_i$, negative ratio $n_i$ and objective ratio $b_i$, where $p_i + n_i + b_i = 1$.
 
 \subsection{Statistical Inference}\label{statistical-inference}
-Finally, we will use statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We will fetch stock prices history from Yahoo Finance for the companies we studied. Stock prices is automatically fetched by a Python script to make our framework scalable. Companies studied and stock symbols are noted in Table \ref{companies-symbols}.
+Finally, we used statstical techniques to evaluate the correlation between consumer opinions and the stock prices. We fetched stock prices history from Yahoo! Finance for the companies we studied. Stock prices was automatically fetched by a Python script to make our framework scalable. Companies studied and stock symbols are noted in Table \ref{companies-symbols}.
 
 \begin{table}
 \begin{center}
@@ -166,7 +164,7 @@ Finally, we will use statstical techniques to evaluate the correlation between c
 \end{center}
 \end{table}
 
-Our hypothesis is that the companies that receive more positive opinion will eventually get a positive impact on their stock prices. Hence, for a given company, we define the opinion vector as the difference of ratio between positive and negative opinion which represent the postive opinion toward a company $O = [o_i]$, where $o_i = p_i - n_i$, for $i$ from $1$ to $n$. We also have stock prices $S = [s_i]$, for $i$ from $1$ to $n$. The problem we are interested is that whether these two time series are correlated or not. We will use Pearson product-moment correlation coefficient (Pearson coefficient) to verify our hypothesis.
+Our hypothesis is that the companies that receive more positive opinion will eventually get a positive impact on their stock prices. Hence, for a given company, we define the opinion vector as the ratio positive opinion toward a company $O = [p_i]$, for $i$ from $1$ to $n$. We also have stock prices $S = [s_i]$, for $i$ from $1$ to $n$. The problem we are interested is that whether these two time series are correlated or not. We used Pearson product-moment correlation coefficient (Pearson coefficient) to verify our hypothesis.
 
 We define our Pearson coefficient as:
 $$
@@ -175,18 +173,16 @@ $$
 
 Where $\bar{O}$ and $\bar{S}$ is the average over the opinion vector and the stock price, respectively.
 
-Since we anticipate there might be a delaying effect from consumer evaluations to the time stock prices reflect the consumer opinion, we will use the cross correlation to find the best time window that maximize the Pearson coefficient. We will take that maximized Pearson coefficient to interpret our result.
+% Since we anticipate there might be a delaying effect from consumer evaluations to the time stock prices reflect the consumer opinion, we will use the cross correlation to find the best time window that maximize the Pearson coefficient. We will take that maximized Pearson coefficient to interpret our result.
 
 The value of Pearson coefficient ranges from $-1$ to $1$. In variables such as stock prices that are influenced by complicated factors, a Pearson coefficient that larger than $0.5$ indicates a strong correlation, while a Pearson coefficient ranges from $0.1$ to $0.3$ can be considered as a minor correlation \cite{Cohen:1988}. We expect the Pearson coefficient of our experiment should be at least $0.1$, a lower bound of minor correlation.
 
-Another statistical method we would like to use is the coherence of the cross-spectrum. The details will be updated later.
-
-For the implementation of the statistical inference, Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy} will be used.
+For the implementation of the statistical inference, Python library SciPy \cite{SciPy}, NumPy \cite{NumPy} or RPy \cite{RPy} were used.
 
 \section{Results}
 
 \subsection{Data collected}
-Until the time this report was written, we have collected tweets from Twitter API from February 18, 2012 to March 17, 2012, five weeks in total. We try to collect tweets at every Saturday morning unless otherwise specified. The time Tweets have been collected might varies slightly, which might introduce certain degree of biases (such as people tend to feel blue at Monday morning while significantly happier at Friday night). However, we assume that the biases should be minor and can be temporarily neglected by now. The number of Tweets we collected for each company and keyword are summarized in Table \ref{keywords-tweet-numbers} and \ref{keywords-tweet-numbers-02}.
+Until the time this report was written, we have collected tweets from Twitter API from February 18, 2012 to March 31, 2012, seven weeks in total. We collected tweets at every Saturday morning unless otherwise specified. The time Tweets had been collected might varies slightly, which might introduce certain degree of biases (such as people tend to feel bluer at Monday mornings while significantly happier at Friday nights). However, we assume that the biases should be minor and can be temporarily neglected by now. The number of Tweets we collected for each company and keyword are summarized in Table \ref{keywords-tweet-numbers} and \ref{keywords-tweet-numbers-02}.
 
 We have also tried to verify Zipf's law on the test data. The ranks and freqencies are summarized as Figure \ref{rank-freq}. By the figure we observe that the test data seems not to follow the Zipf's law very well. It might due to the fact that Tweets are at most 140 chars each, hence users tend to use similar words. Also, due to the fact that Tweets have some specific features such as reply, retweet, or the inclusion of link, the figure we produced has a fairly long right tail. We cut it off around rank $2000$.
 
@@ -268,10 +264,10 @@ We have also tried to verify Zipf's law on the test data. The ranks and freqenci
 \end{center}
 \end{table}
 
-In addition to test data, we collected 1000 tweets for each technology news site choosed. Subjective tweets are retrieved by querying positive and negative emoticons such as ':)' or ':('. The number of positive and negative Tweets are 6943 and 7451, respectively.
+In addition to test data, we collected $1400$ tweets for each technology news site choosed. Subjective tweets are retrieved by querying positive and negative emoticons such as ':)' or ':('. The number of positive and negative Tweets are $9886$ and $10431$, respectively.
 
 \subsection{Subjectivity Classification}
-We use different classifiers to run the objectivity classification and choose the one that produces best result that will be applied to test data. Accuracies of different classifiers are summarized in Table \ref{classifiers-obj}. We observed that the accuracy achieved by all the four classiers are higher than $90\%$. It might due to the fact that objective Tweets retrieved from technology news have some common format and can be quite distinguishable from Tweets by general users. To have objective Tweets that are more similar to the test data should be one of our future works.
+We used different classifiers to run the objectivity classification and choose the one that produces best result that was applied to the test data. Accuracies of different classifiers are summarized in Table \ref{classifiers-obj}. We observed that the accuracy achieved by all the four classiers are higher than $90\%$. It might due to the fact that objective Tweets retrieved from technology news have some common format and can be quite distinguishable from Tweets by general users. To have objective Tweets that are more representative to our test data should be one of the future works.
 
 \begin{table}
 \begin{center}
@@ -289,7 +285,7 @@ We use different classifiers to run the objectivity classification and choose th
 \end{center}
 \end{table}
 
-Since the Random Forest achieves the best accuracy, we use it to classify the objectivity of the test data. The results are summarized in Table \ref{objectivity-by-company}
+Since the Random Forest achieved the best accuracy, we used it to classify the objectivity of the test data. The results are summarized in Table \ref{objectivity-by-company}
 
 \begin{table}
 \begin{center}
@@ -316,9 +312,9 @@ Since the Random Forest achieves the best accuracy, we use it to classify the ob
 As one can see, almost all of the ratios of objectivity are above $70\%$, which is a fairly high ratio. It can also be justified by our intuition that most of people tweets for sharing information, while small portion of them are expressing their own opinion.
 
 \subsection{Polarity Classification}
-Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since the Random Forest achieves the highest accuracy, we will then apply the classifier to predict the polarity of test data.
+Accuracies of different classifiers are summarized in Table \ref{classifiers-polarity}. Since the Random Forest achieved the highest accuracy, we then applied the classifier to predict the polarity of test data.
 
-Note that in our experiment, we discovered that the Random Forest outperformed SVM, which is different from what reported by previous works. In implementation, $weka.classifiers.trees.RandomForest$ are used for the Random Forest.
+Note that in our experiment, we discovered that the Random Forest outperformed SVM, which is different from what reported by previous works. In implementation, $weka.classifiers.trees.RandomForest$ were used for the Random Forest.
 
 \begin{table}
 \begin{center}
@@ -338,7 +334,7 @@ Note that in our experiment, we discovered that the Random Forest outperformed S
 
 Also we noted that the accuracy we achived in similar method that test on Tweets is comparable but slightly lower than that of Go \etal~\cite{Go:09}. We suppose the reasons are that we haven't tune the feature size and training size to its best.
 
-Then, the model is used to classify tweets in testing sets. The result of polarity classfication can be summarized as Table \ref{polarity-by-company}.
+Then, the model was used to classify tweets in testing sets. The result of polarity classfication can be summarized as Table \ref{polarity-by-company}.
 
 \begin{table}
 \begin{center}
@@ -362,11 +358,13 @@ Then, the model is used to classify tweets in testing sets. The result of polari
 \end{center}
 \end{table}
 
-As one can see, most of the positive ratios are around $60\%$ to $80\%$. Amazon and Research in Motion have the lowest rate of positiivty. Probably because their main products such as Kindle or BlackBerry are relatively not positively rated by consumers. 
+As one can see, most of the positive ratios are around $80\%$ to $95\%$. Dell and Yahoo have the lowest rate of positive evaluation. Probably because their recent major products are relatively not positively rated by consumers. Contrary to our expectation, Google also has one of the lowest rate of positive evaluation.
 
-In contrast, Intel has the highest rate of positivity. However, we also observe that the company also has the highest rate of objectivity. It might due to the fact that most of users tweet about Intel mainly for sharing information, instead of expressing their opinion toward the company or its products.
+Apple has one of the highest rate of positive evaluation, which is align with our expectation, since the recent major products was welcomed by the market, generally speaking. However, in the same industry, Research in Motion also get one of the highest rate of positive evaluation, which is also contrary to our expectation too.
 
-Yahoo also has one of the highest rates in positivity, which is slightly contrast to our expectation, in regards of the company's recent performance in product innovation. However, if one takes a closer look at Tweets collected for the company, an observation can be made that there is a fair amount of Tweets are actually news shared from the Yahoo! News, rather than a Tweet that directly evaluates the company or its products. It might introduce bias to our analysis. Finding a better mechanism for collecting Tweets that directly related to evaluations of companies might also be one of our future works.
+Generally speaking, we regard the results in week five is better than week seven, for the positive ratio is generally higher than we expected. Besides, the corresponding positive ratios are also sometimes not aligned with our intuition. We discuss the possible reasons later in this section.
+
+% Yahoo also has one of the highest rates in positivity, which is slightly contrast to our expectation, in regards of the company's recent performance in product innovation. However, if one takes a closer look at Tweets collected for the company, an observation can be made that there is a fair amount of Tweets are actually news shared from the Yahoo! News, rather than a Tweet that directly evaluates the company or its products. It might introduce bias to our analysis. Finding a better mechanism for collecting Tweets that directly related to evaluations of companies might also be one of our future works.
 
 \subsubsection{Using Bigrams as Features}
 
