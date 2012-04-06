@@ -59,7 +59,7 @@ if __name__ == '__main__':
     for (company, keyword_list) in companies.iteritems():
         for keyword in keyword_list:
             query = '#' + keyword
-            outfile = 'tweets/w7/' + company + '_' + keyword
+            outfile = 'tweets/w8/' + company + '_' + keyword
             get_tweets(query, outfile)
             print 'sleep for ten seconds.. being nice to twitter..'
             time.sleep(10)
