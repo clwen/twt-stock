@@ -516,6 +516,33 @@ Finally, we envision that there are quite a few rooms for the improvement for th
 
 However, we also want to note that the average of Pearson Coefficients from the study is $0.0537$, which means there is an overall slight positive correalation. If one incorporates our result to systems such as an automatic trading robot, the system may still benifited from the analysis we conducted here. In addition, we also believe that the positve correalation may be improved as we find more sophiscated mechanisms to handle the limitations mentioned above.
 
+\subsubsection{Optimal Phase}
+It is possible that the effects of evaluations on the stock prices are a combination of short-term one as well as long-term ones. Here, we calculated the Pearson Correlation Coefficient of sentiment analysis from week $w_i$ with stock prices of week $w_{i+l}$. Since we had only seven weeks of data, we restricted the possible lags $l$ to be from $0$ to $3$. The lag that produced maximum Pearson Correlation Coeficients are summarized as Table \ref{optimal-phase}.
+
+\begin{table}
+\begin{center}
+    \begin{tabular}{ | c || c | c | c | }
+        \hline
+        \textbf{Company} & \textbf{Optimal Phase} & \textbf{PPMCC} & \textbf{2-tailed p-value} \\ \hline
+        \hline
+        Apple & 0 & 0.569057264858 & 0.182433613581 \\ \hline
+        Google & 1 & 0.548387491205 & 0.259876730383 \\ \hline
+        Microsoft & 3 & 0.823936595965 & 0.176063404035 \\ \hline
+        Amazon & 1 & 0.589394353498 & 0.218282055946 \\ \hline
+        Research in Motion & 2 & 0.738119493558 & 0.154399681132 \\ \hline
+        Dell & 0 & -0.0821672150498 & 0.86097901078 \\ \hline
+        Intel & 3 & 0.575651230014 & 0.424348769986 \\ \hline
+        Yahoo & 1 & 0.748673100148 & 0.0868102576061 \\ \hline
+        Nvidia & 0 & 0.246641522789 & 0.59390682236 \\ \hline
+        Netflix & 3 & 0.524957044918 & 0.475042955082 \\ \hline
+    \end{tabular}
+\caption{Pearson Coefficients analysis by company}
+\label{optimal-phase}
+\end{center}
+\end{table}
+
+As we can observe from the result, incorporate the time phase greatly improved the overall correlation. The average of Pearson Correlation Coefficients soared to $0.5283$. More sophiscated statistical method applied on more data will be one of our future works.
+
 \subsection{Difference between Week Five and Week Seven}
 
 Although the accuracy achieved by cross validation is higher in cross-validation (from around $76\%$ to around $79\%$), we found that the results from week five are more aligned with our expectation. For example, the positive ratio in week seven was around $80\%$ to $95\%$, which might be incorrect empirically speaking, if we take a closer look at individual Tweet in the corpus (i.e., randomly conduct a sampling and manually label the polarity). In contrast, in week five, the same metric was around $60\%$ to $80\%$, which is more aligned with our experience. In addition, the average Pearson correlation coefficient also dropped from $0.15$ to $0.05$.
